@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import JavaFX.Controls.*?>
+<?import main.TitledBorder?>
+
+<TabPane tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="main.MainController">
+	<Tab text="Start">
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Welcome">
+				<Text styleClass="textField">Welcome</Text>	
+			</TitledBorder>
+		</VBox>	
+	</Tab>
+	<Tab text="Rechnungen">
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Suche">
+				<VBox styleClass="textField">
+					<TextField fx:id="invoiceID" styleClass="padding" text="Rechnungsnummer" />				
+					<TextField fx:id="invoiceDate" styleClass="padding" text="Rechnungsdatum" />				
+					<TextField fx:id="invoiceCustomer" styleClass="padding" text="Kundenname" />
+				</VBox>
+			</TitledBorder>
+		</VBox>
+	</Tab>
+	<Tab text="Kunden">		
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Suche">
+				<VBox styleClass="textField">
+					<TextField fx:id="customName" styleClass="padding" text="Vorname" />				
+					<TextField fx:id="customLastName" styleClass="padding" text="Nachname" />				
+					<TextField fx:id="customCompany" styleClass="padding" text="Firmenname" />
+				</VBox>
+			</TitledBorder>
+		</VBox>		
+	</Tab>
+</TabPane>
+
