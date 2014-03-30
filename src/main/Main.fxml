@@ -11,32 +11,101 @@
 	fx:controller="main.MainController">
 	<Tab text="Start">
 		<VBox styleClass="borderedBox">
-			<TitledBorder title="Welcome">
-				<Text styleClass="textField">Welcome</Text>	
+			<TitledBorder title="Statistik">
+				<VBox styleClass="textField">
+					<Text fx:id="totalCustomers">Total Number of Customers: XX</Text>
+					<Text fx:id="totalInvoices">Total Number of Invoices: XX</Text>
+				</VBox>
 			</TitledBorder>
 		</VBox>	
 	</Tab>
-	<Tab text="Rechnungen">
+	<Tab text="Kunde">		
 		<VBox styleClass="borderedBox">
-			<TitledBorder title="Suche">
-				<VBox styleClass="textField">
-					<TextField fx:id="invoiceID" styleClass="padding" text="Rechnungsnummer" />				
-					<TextField fx:id="invoiceDate" styleClass="padding" text="Rechnungsdatum" />				
-					<TextField fx:id="invoiceCustomer" styleClass="padding" text="Kundenname" />
+			<TitledBorder title="Firma">
+				<VBox fx:id="companyPane" styleClass="textField">
+					<Label>Firmenname:</Label>
+					<TextField fx:id="customerName" styleClass="padding" />				
+					<Label>UID:</Label>
+					<TextField fx:id="customerUID" styleClass="padding" />				
 				</VBox>
 			</TitledBorder>
+			
+			<TitledBorder title="Person">
+				<VBox fx:id="personPane" styleClass="textField">
+					<Label>Titel</Label>
+					<TextField fx:id="customerTitle" styleClass="padding"/>
+					<Label>Vorname:</Label>
+					<TextField fx:id="customerSurname" styleClass="padding" />				
+					<Label>Nachname:</Label>
+					<TextField fx:id="customerLastname" styleClass="padding" />
+					<Label>Suffix:</Label>
+					<TextField fx:id="customerSuffix" styleClass="padding" />
+					<Label>Arbeitet bei:</Label>
+					<TextField fx:id="customerWorksAt" styleClass="padding" />
+					<Label>Geboren am:</Label>
+					<TextField fx:id="customeBirthday" styleClass="padding" />				
+				</VBox>
+			</TitledBorder>
+			
+			<TitledBorder title="Adresse">
+				<VBox styleClass="textField">
+					<Label>Strasse:</Label>
+					<TextField fx:id="customerAddress" styleClass="padding" />				
+					<Label>PLZ:</Label>
+					<TextField fx:id="customerPLZ" styleClass="padding" />
+					<Label>Ort:</Label>
+					<TextField fx:id="customerCity" styleClass="padding" />		
+				</VBox>
+			</TitledBorder>			
+			<Button fx:id="createCustomer" styleClass="createButton">Anlegen</Button>
 		</VBox>
 	</Tab>
-	<Tab text="Kunden">		
+	<Tab text="Rechnung">
 		<VBox styleClass="borderedBox">
-			<TitledBorder title="Suche">
+			<TitledBorder title="Neue Rechnung">
 				<VBox styleClass="textField">
-					<TextField fx:id="customName" styleClass="padding" text="Vorname" />				
-					<TextField fx:id="customLastName" styleClass="padding" text="Nachname" />				
-					<TextField fx:id="customCompany" styleClass="padding" text="Firmenname" />
+					<Label>Rechnungsnummer:</Label>
+					<TextField fx:id="invoiceID" styleClass="padding" />				
+					<Label>Rechnungsdatum:</Label>
+					<TextField fx:id="invoiceDate" styleClass="padding" />				
+					<Label>Kundenname:</Label>
+					<TextField fx:id="invoiceCustomer" styleClass="padding" />
+					<Label>Artikel</Label>
+					<TextField fx:id="invoiceElement" styleClass="padding" />
 				</VBox>
 			</TitledBorder>
-		</VBox>		
+			<Button fx:id="createInvoice" styleClass="createButton">Anlegen</Button>
+		</VBox>
+	</Tab>	
+	<Tab text="Suche">
+		<VBox>
+			<VBox styleClass="borderedBox">
+				<TitledBorder title="Suche nach Rechnung">
+					<VBox styleClass="textField">
+						<Label>Rechnungsnummer:</Label>
+						<TextField fx:id="searchInvoiceID" styleClass="padding" />				
+						<Label>Rechnungsdatum:</Label>
+						<TextField fx:id="searchInvoiceDate" styleClass="padding" />				
+						<Label>Kundenname:</Label>
+						<TextField fx:id="searchInvoiceCustomer" styleClass="padding" />
+					</VBox>
+				</TitledBorder>
+				<Button fx:id="searchInvoice" styleClass="createButton">Suchen</Button>
+			</VBox>
+			<VBox styleClass="borderedBox">
+				<TitledBorder title="Suche nach Kunden">
+					<VBox styleClass="textField">
+						<Label>Vorname:</Label>
+						<TextField fx:id="searchCustomerName" styleClass="padding" />				
+						<Label>Nachname:</Label>
+						<TextField fx:id="searchCustomerLastName" styleClass="padding" />				
+						<Label>Firmenname:</Label>
+						<TextField fx:id="searchCustomerCompany" styleClass="padding" />
+					</VBox>
+				</TitledBorder>
+				<Button fx:id="searchCustomer" styleClass="createButton">Suchen</Button>
+			</VBox>
+		</VBox>
 	</Tab>
 </TabPane>
 

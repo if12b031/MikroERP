@@ -1,30 +1,28 @@
 package contacts;
 
-import java.sql.Date;
-
 public class Person extends Customer {
 
-	private String _name;
-	private String _lastName;
 	private String _title;
 	private String _suffix;
-	private Date _dateOfBirth;
+	private String _surname;
+	private String _lastname;	
+	private String _dateOfBirth;
 	private String _employedAt;
 	
-	public String get_name() {
-		return _name;
+	public String get_surname() {
+		return _surname;
 	}
 	
-	public void set_name(String _name) {
-		this._name = _name;
+	public void set_surname(String _surname) {
+		this._surname = _surname;
 	}
 	
-	public String get_lastName() {
-		return _lastName;
+	public String get_lastname() {
+		return _lastname;
 	}
 	
-	public void set_lastName(String _lastName) {
-		this._lastName = _lastName;
+	public void set_lastname(String _lastname) {
+		this._lastname = _lastname;
 	}
 	
 	public String get_title() {
@@ -43,11 +41,11 @@ public class Person extends Customer {
 		this._suffix = _suffix;
 	}
 	
-	public Date get_dateOfBirth() {
+	public String get_dateOfBirth() {
 		return _dateOfBirth;
 	}
 	
-	public void set_dateOfBirth(Date _dateOfBirth) {
+	public void set_dateOfBirth(String _dateOfBirth) {
 		this._dateOfBirth = _dateOfBirth;
 	}
 	

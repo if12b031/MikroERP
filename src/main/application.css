@@ -7,6 +7,10 @@
 	-fx-spacing: 10;
 }
 
+.createButton {
+	-fx-text-alignment: right;
+}
+
 .textField {
 	-fx-padding: 5;
 	-fx-spacing: 10;
