@@ -1,7 +1,5 @@
 package main;
 
-import contacts.Company;
-import contacts.Person;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -25,18 +23,30 @@ public class MainModel {
 	private BooleanBinding disableEditPerson = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			return !Utils.isNullOrEmpty(getCustomerName())
-					&& Utils.isNullOrEmpty(getCustomerSurname())
-					&& Utils.isNullOrEmpty(getCustomerLastname());
+			return (!Utils.isNullOrEmpty(getCustomerName()) //Company-name textfield is not empty
+				|| !Utils.isNullOrEmpty(getCustomerUID())) //Company-UID textfield is not empty
+				/* All textfields related to person are empty */
+				&& Utils.isNullOrEmpty(getCustomerSurname())
+				&& Utils.isNullOrEmpty(getCustomerLastname())
+				&& Utils.isNullOrEmpty(getCustomerTitle())
+				&& Utils.isNullOrEmpty(getCustomerSuffix())
+				&& Utils.isNullOrEmpty(getCustomerBirthday())
+				&& Utils.isNullOrEmpty(getCustomerWorksAt());
 		}
 	};
 
 	private BooleanBinding disableEditCompany = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
-			return Utils.isNullOrEmpty(getCustomerName())
-					&& (!Utils.isNullOrEmpty(getCustomerSurname()) || !Utils
-							.isNullOrEmpty(getCustomerLastname()));
+			return /* All textfields related to person are not empty */
+				!Utils.isNullOrEmpty(getCustomerSurname())
+				|| !Utils.isNullOrEmpty(getCustomerLastname())
+				|| !Utils.isNullOrEmpty(getCustomerTitle())
+				|| !Utils.isNullOrEmpty(getCustomerSuffix())
+				|| !Utils.isNullOrEmpty(getCustomerBirthday())
+				|| !Utils.isNullOrEmpty(getCustomerWorksAt())
+				&& (Utils.isNullOrEmpty(getCustomerName()) //Company-name textfield is empty
+				&& Utils.isNullOrEmpty(getCustomerUID())); //Company-UID textfield is empty
 		}
 	};
 
@@ -51,42 +61,15 @@ public class MainModel {
 		};
 		customerName.addListener(canEditListener);
 		customerUID.addListener(canEditListener);
+		customerTitle.addListener(canEditListener);
+		customerSuffix.addListener(canEditListener);
 		customerSurname.addListener(canEditListener);
 		customerLastname.addListener(canEditListener);
 		customerWorksAt.addListener(canEditListener);
 		customerBirthday.addListener(canEditListener);
 	}
 	
-	/* Set Customer */
-	public void setCompany(Company company) {
-		this.customerName.set(company.get_name());
-		this.customerUID.set(company.get_uid());
-	}
-	
-	public void setPerson(Person person) {
-		this.customerTitle.set(person.get_title());
-		this.customerSuffix.set(person.get_suffix());
-		this.customerSurname.set(person.get_surname());
-		this.customerLastname.set(person.get_lastname());
-		this.customerBirthday.set(person.get_dateOfBirth());
-		this.customerWorksAt.set(person.get_employedAt());
-	}
-	
-	/* Update Customer */
-	public void updateCompany(Company company) {
-		company.set_name(this.customerName.get());
-		company.set_uid(this.customerUID.get());
-	}
-
-	public void updatePerson(Person person) {
-		person.set_title(this.customerTitle.get());
-		person.set_suffix(this.customerSuffix.get());
-		person.set_surname(this.customerSurname.get());
-		person.set_lastname(this.customerLastname.get());
-		person.set_dateOfBirth(this.customerBirthday.get());
-		person.set_employedAt(this.customerWorksAt.get());
-	}	
-
+	/* Getters for StringProperties */
 	public  StringProperty customerNameProperty() {
 		return customerName;
 	}

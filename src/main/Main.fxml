@@ -4,7 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import JavaFX.Controls.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
 <?import main.TitledBorder?>
 
 <TabPane tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
@@ -23,58 +24,74 @@
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Firma">
 				<VBox fx:id="companyPane" styleClass="textField">
-					<Label>Firmenname:</Label>
+					<Label>*Firmenname:</Label>
 					<TextField fx:id="customerName" styleClass="padding" />				
-					<Label>UID:</Label>
+					<Label>*UID:</Label>
 					<TextField fx:id="customerUID" styleClass="padding" />				
 				</VBox>
-			</TitledBorder>
-			
+			</TitledBorder>			
 			<TitledBorder title="Person">
 				<VBox fx:id="personPane" styleClass="textField">
 					<Label>Titel</Label>
 					<TextField fx:id="customerTitle" styleClass="padding"/>
-					<Label>Vorname:</Label>
+					<Label>*Vorname:</Label>
 					<TextField fx:id="customerSurname" styleClass="padding" />				
-					<Label>Nachname:</Label>
+					<Label>*Nachname:</Label>
 					<TextField fx:id="customerLastname" styleClass="padding" />
 					<Label>Suffix:</Label>
 					<TextField fx:id="customerSuffix" styleClass="padding" />
 					<Label>Arbeitet bei:</Label>
 					<TextField fx:id="customerWorksAt" styleClass="padding" />
 					<Label>Geboren am:</Label>
-					<TextField fx:id="customeBirthday" styleClass="padding" />				
+					<TextField fx:id="customerBirthday" styleClass="padding" />				
 				</VBox>
-			</TitledBorder>
-			
+			</TitledBorder>			
 			<TitledBorder title="Adresse">
 				<VBox styleClass="textField">
-					<Label>Strasse:</Label>
+					<Label>*Strasse:</Label>
 					<TextField fx:id="customerAddress" styleClass="padding" />				
-					<Label>PLZ:</Label>
+					<Label>*PLZ:</Label>
 					<TextField fx:id="customerPLZ" styleClass="padding" />
-					<Label>Ort:</Label>
+					<Label>*Ort:</Label>
 					<TextField fx:id="customerCity" styleClass="padding" />		
 				</VBox>
 			</TitledBorder>			
-			<Button fx:id="createCustomer" styleClass="createButton">Anlegen</Button>
+			<Button fx:id="createCustomer" onAction="#createNewCustomer" styleClass="createButton">Anlegen</Button>
+			<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Abbruch</Button>
 		</VBox>
 	</Tab>
 	<Tab text="Rechnung">
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Neue Rechnung">
 				<VBox styleClass="textField">
-					<Label>Rechnungsnummer:</Label>
+					<Label>*Rechnungsnummer:</Label>
 					<TextField fx:id="invoiceID" styleClass="padding" />				
-					<Label>Rechnungsdatum:</Label>
+					<Label>*Rechnungsdatum:</Label>
 					<TextField fx:id="invoiceDate" styleClass="padding" />				
-					<Label>Kundenname:</Label>
+					<Label>*Kundenname:</Label>
 					<TextField fx:id="invoiceCustomer" styleClass="padding" />
-					<Label>Artikel</Label>
+					<Label>*Lieferadresse:</Label>
+					<TextField fx:id="invoiceShippingAddress" styleClass="padding" />
+					<Label>*Rechnungsadresse:</Label>
+					<TextField fx:id="invoiceAddress" styleClass="padding" />					
+					<Label>Kommentar:</Label>
+					<TextField fx:id="invoiceComment" styleClass="padding" />
+					<Label>Nachricht:</Label>
+					<TextField fx:id="invoiceMessage" styleClass="padding" />
+					<ComboBox fx:id="invoiceDirection" promptText="Ausgehend" prefWidth="100">
+						<items>
+					      	<FXCollections fx:factory="observableArrayList">
+					        	<String fx:value="Eingehend" />
+								<String fx:value="Ausgehend" />
+					    	</FXCollections>
+						</items>
+					</ComboBox>
+					<Label>*Artikel:</Label>
 					<TextField fx:id="invoiceElement" styleClass="padding" />
 				</VBox>
 			</TitledBorder>
-			<Button fx:id="createInvoice" styleClass="createButton">Anlegen</Button>
+			<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
+			<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Abbruch</Button>
 		</VBox>
 	</Tab>	
 	<Tab text="Suche">
@@ -90,7 +107,7 @@
 						<TextField fx:id="searchInvoiceCustomer" styleClass="padding" />
 					</VBox>
 				</TitledBorder>
-				<Button fx:id="searchInvoice" styleClass="createButton">Suchen</Button>
+				<Button fx:id="searchInvoice" onAction="#searchForInvoice" styleClass="createButton">Suchen</Button>
 			</VBox>
 			<VBox styleClass="borderedBox">
 				<TitledBorder title="Suche nach Kunden">
@@ -103,7 +120,7 @@
 						<TextField fx:id="searchCustomerCompany" styleClass="padding" />
 					</VBox>
 				</TitledBorder>
-				<Button fx:id="searchCustomer" styleClass="createButton">Suchen</Button>
+				<Button fx:id="searchCustomer" onAction="#searchForCustomer" styleClass="createButton">Suchen</Button>
 			</VBox>
 		</VBox>
 	</Tab>

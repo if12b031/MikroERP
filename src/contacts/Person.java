@@ -1,6 +1,6 @@
 package contacts;
 
-public class Person extends Customer {
+public class Person {
 
 	private String _title;
 	private String _suffix;
@@ -8,6 +8,9 @@ public class Person extends Customer {
 	private String _lastname;	
 	private String _dateOfBirth;
 	private String _employedAt;
+	private String _address;
+	private String _plz;
+	private String _city;
 	
 	public String get_surname() {
 		return _surname;
@@ -55,5 +58,29 @@ public class Person extends Customer {
 	
 	public void set_employedAt(String _employedAt) {
 		this._employedAt = _employedAt;
+	}
+
+	public String get_address() {
+		return _address;
+	}
+
+	public void set_address(String _address) {
+		this._address = _address;
+	}
+
+	public String get_plz() {
+		return _plz;
+	}
+
+	public void set_plz(String _plz) {
+		this._plz = _plz;
+	}
+
+	public String get_city() {
+		return _city;
+	}
+
+	public void set_city(String _city) {
+		this._city = _city;
 	}
 }

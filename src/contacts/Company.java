@@ -1,9 +1,12 @@
 package contacts;
 
-public class Company extends Customer {
+public class Company {
 
 	private String _uid;
 	private String _name;
+	private String _address;
+	private String _plz;
+	private String _city;
 	
 	public String get_uid() {
 		return _uid;
@@ -18,5 +21,29 @@ public class Company extends Customer {
 	
 	public void set_name(String _name) {
 		this._name = _name;
+	}
+	
+	public String get_address() {
+		return _address;
+	}
+
+	public void set_address(String _address) {
+		this._address = _address;
+	}
+
+	public String get_plz() {
+		return _plz;
+	}
+
+	public void set_plz(String _plz) {
+		this._plz = _plz;
+	}
+
+	public String get_city() {
+		return _city;
+	}
+
+	public void set_city(String _city) {
+		this._city = _city;
 	}
 }
