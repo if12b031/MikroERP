@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.collections.*?>
 <?import java.lang.*?>
-<?import main.TitledBorder?>
+<?import utils.TitledBorder?>
 
 <TabPane tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
 	fx:controller="main.MainController">
@@ -121,6 +121,15 @@
 					</VBox>
 				</TitledBorder>
 				<Button fx:id="searchCustomer" onAction="#searchForCustomer" styleClass="createButton">Suchen</Button>
+			</VBox>
+			<VBox styleClass="borderedBox">
+				<VBox>
+						<Button fx:id="slistAllCustomers" onAction="#listAllCustomers" styleClass="createButton">Zeige alle Kunden</Button>
+				</VBox>				
+				<TitledBorder title="Suchergebnisse">					
+					<VBox fx:id="searchResults" styleClass="textField">
+					</VBox>
+				</TitledBorder>
 			</VBox>
 		</VBox>
 	</Tab>

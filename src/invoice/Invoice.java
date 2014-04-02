@@ -1,6 +1,6 @@
 package invoice;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Invoice {
 
@@ -16,7 +16,7 @@ public class Invoice {
 	private float _ust;
 	private float _gross; //brutto
 	private float _net;
-	private List<InvoiceElement> _articles;
+	private ArrayList<InvoiceElement> _articles;
 	
 	public int get_invoiceNumber() {
 		return _invoiceNumber;
@@ -113,11 +113,11 @@ public class Invoice {
 		this._net = _net;
 	}
 	
-	public List<InvoiceElement> get_articles() {
+	public ArrayList<InvoiceElement> get_articles() {
 		return _articles;
 	}
 	
-	public void set_articles(List<InvoiceElement> _articles) {
+	public void set_articles(ArrayList<InvoiceElement> _articles) {
 		this._articles = _articles;
 	}
 }

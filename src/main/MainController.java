@@ -1,14 +1,18 @@
 package main;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import proxy.Proxy;
+import utils.Utils;
 import invoice.Invoice;
 import contacts.Customer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -16,6 +20,7 @@ import javafx.scene.text.Text;
 public class MainController<T> implements Initializable{
 	
 	private MainModel presentationModel;
+	private Proxy proxy;
 	
 	/* Variables related to TabPane Kunde */
 	@FXML private Text totalCustomers;
@@ -60,10 +65,12 @@ public class MainController<T> implements Initializable{
 	@FXML private TextField searchCustomerCompany;
 	@FXML private Button searchCustomer;
 	@FXML private Button searchInvoice;
+	@FXML private VBox searchResults;
 	
 	public void initialize(URL url, ResourceBundle resources) {
 		this.presentationModel = new MainModel();
-		applyBindings();
+		this.proxy = new Proxy();
+		applyBindings();		
 	}
 
 	private void applyBindings() {
@@ -87,20 +94,25 @@ public class MainController<T> implements Initializable{
 	
 	@FXML private void createNewCustomer() {
 		if(checkCustomerInput()){
-			Customer customer = new Customer();
-			customer.set_name(customerName.getText());
-			customer.set_uid(customerUID.getText());
-			customer.set_title(customerTitle.getText());
-			customer.set_suffix(customerSuffix.getText());
-			customer.set_surname(customerSurname.getText());
-			customer.set_lastname(customerLastname.getText());
-			customer.set_dateOfBirth(customerBirthday.getText());
-			customer.set_employedAt(customerWorksAt.getText());
-			customer.set_address(customerAddress.getText());
-			customer.set_plz(customerPLZ.getText());
-			customer.set_city(customerCity.getText());
-			
-			System.out.println("New Customer created!");
+			try {
+				Customer customer = new Customer();
+				customer.set_name(customerName.getText());
+				customer.set_uid(customerUID.getText());
+				customer.set_title(customerTitle.getText());
+				customer.set_suffix(customerSuffix.getText());
+				customer.set_surname(customerSurname.getText());
+				customer.set_lastname(customerLastname.getText());
+				customer.set_dateOfBirth(customerBirthday.getText());
+				customer.set_employedAt(customerWorksAt.getText());
+				customer.set_address(customerAddress.getText());
+				customer.set_plz(Integer.parseInt(customerPLZ.getText()));
+				customer.set_city(customerCity.getText());
+				
+				System.out.println("New Customer created!");
+			} catch(NumberFormatException e){
+				System.out.println("Field \"PLZ\" in TabPane \"Kunde\" is not an Integer!");
+	        	e.printStackTrace();
+			}
 		} else{
 			System.out.println("One or more required fields in TabPane \"Kunde\" is empty!");
 		}
@@ -162,8 +174,36 @@ public class MainController<T> implements Initializable{
 		invoiceElement.clear();
 	}
 	
-	@FXML private void searchForCustomer() {
+	@FXML private void searchForCustomer() {		
+			
+	}
+	
+	@FXML private void listAllCustomers() {		
+		List<Customer> result = proxy.listAllCustomers();		
+		searchResults.getChildren().clear();
 		
+		for(int i=0; i<result.size(); i++) {
+			Label label = new Label();
+			StringBuilder strBuilder = new StringBuilder();
+			
+			strBuilder.append(result.get(i).get_title());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_surname());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_lastname());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_dateOfBirth());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_address());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_plz());
+			strBuilder.append(" ");
+			strBuilder.append(result.get(i).get_city());
+			strBuilder.append(" ");
+
+			label.setText(strBuilder.toString());
+			searchResults.getChildren().add(label);			
+		}		
 	}
 	
 	@FXML private void searchForInvoice() {

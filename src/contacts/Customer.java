@@ -11,8 +11,8 @@ public class Customer {
 	private String _dateOfBirth;
 	private String _employedAt;
 	private String _address;
-	private String _plz;
-	private String _city;	
+	private int _plz;
+	private String _city;
 	
 	public String get_uid() {
 		return _uid;
@@ -37,11 +37,11 @@ public class Customer {
 		this._address = _address;
 	}
 
-	public String get_plz() {
+	public int get_plz() {
 		return _plz;
 	}
 
-	public void set_plz(String _plz) {
+	public void set_plz(int _plz) {
 		this._plz = _plz;
 	}
 

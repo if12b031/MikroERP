@@ -1,4 +1,4 @@
-package main;
+package utils;
 
 public final class Utils {
 	

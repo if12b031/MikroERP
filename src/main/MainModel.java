@@ -1,5 +1,6 @@
 package main;
 
+import utils.Utils;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
