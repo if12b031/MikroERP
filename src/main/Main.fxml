@@ -24,74 +24,116 @@
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Firma">
 				<VBox fx:id="companyPane" styleClass="textField">
-					<Label>*Firmenname:</Label>
-					<TextField fx:id="customerName" styleClass="padding" />				
-					<Label>*UID:</Label>
-					<TextField fx:id="customerUID" styleClass="padding" />				
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Firmenname:</Label>
+						<TextField fx:id="customerName" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*UID:</Label>
+						<TextField fx:id="customerUID" styleClass="padding" prefWidth="200" />
+					</HBox>				
 				</VBox>
 			</TitledBorder>			
 			<TitledBorder title="Person">
 				<VBox fx:id="personPane" styleClass="textField">
-					<Label>Titel</Label>
-					<TextField fx:id="customerTitle" styleClass="padding"/>
-					<Label>*Vorname:</Label>
-					<TextField fx:id="customerSurname" styleClass="padding" />				
-					<Label>*Nachname:</Label>
-					<TextField fx:id="customerLastname" styleClass="padding" />
-					<Label>Suffix:</Label>
-					<TextField fx:id="customerSuffix" styleClass="padding" />
-					<Label>Arbeitet bei:</Label>
-					<TextField fx:id="customerWorksAt" styleClass="padding" />
-					<Label>Geboren am:</Label>
-					<TextField fx:id="customerBirthday" styleClass="padding" />				
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Titel</Label>
+						<TextField fx:id="customerTitle" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Vorname:</Label>
+						<TextField fx:id="customerSurname" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Nachname:</Label>
+						<TextField fx:id="customerLastname" styleClass="padding" prefWidth="200" />						
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Suffix:</Label>
+						<TextField fx:id="customerSuffix" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Arbeitet bei:</Label>
+						<TextField fx:id="customerWorksAt" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Geboren am:</Label>
+						<TextField fx:id="customerBirthday" styleClass="padding" prefWidth="200" />
+					</HBox>				
 				</VBox>
 			</TitledBorder>			
 			<TitledBorder title="Adresse">
 				<VBox styleClass="textField">
-					<Label>*Strasse:</Label>
-					<TextField fx:id="customerAddress" styleClass="padding" />				
-					<Label>*PLZ:</Label>
-					<TextField fx:id="customerPLZ" styleClass="padding" />
-					<Label>*Ort:</Label>
-					<TextField fx:id="customerCity" styleClass="padding" />		
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Strasse:</Label>
+						<TextField fx:id="customerAddress" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*PLZ:</Label>
+						<TextField fx:id="customerPLZ" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Ort:</Label>
+						<TextField fx:id="customerCity" styleClass="padding" prefWidth="200" />
+					</HBox>		
 				</VBox>
 			</TitledBorder>			
-			<Button fx:id="createCustomer" onAction="#createNewCustomer" styleClass="createButton">Anlegen</Button>
-			<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Abbruch</Button>
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="createCustomer" onAction="#createNewCustomer" styleClass="createButton">Anlegen</Button>
+				<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Abbruch</Button>
+			</HBox>
 		</VBox>
 	</Tab>
 	<Tab text="Rechnung">
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Neue Rechnung">
 				<VBox styleClass="textField">
-					<Label>*Rechnungsnummer:</Label>
-					<TextField fx:id="invoiceID" styleClass="padding" />				
-					<Label>*Rechnungsdatum:</Label>
-					<TextField fx:id="invoiceDate" styleClass="padding" />				
-					<Label>*Kundenname:</Label>
-					<TextField fx:id="invoiceCustomer" styleClass="padding" />
-					<Label>*Lieferadresse:</Label>
-					<TextField fx:id="invoiceShippingAddress" styleClass="padding" />
-					<Label>*Rechnungsadresse:</Label>
-					<TextField fx:id="invoiceAddress" styleClass="padding" />					
-					<Label>Kommentar:</Label>
-					<TextField fx:id="invoiceComment" styleClass="padding" />
-					<Label>Nachricht:</Label>
-					<TextField fx:id="invoiceMessage" styleClass="padding" />
-					<ComboBox fx:id="invoiceDirection" promptText="Ausgehend" prefWidth="100">
-						<items>
-					      	<FXCollections fx:factory="observableArrayList">
-					        	<String fx:value="Eingehend" />
-								<String fx:value="Ausgehend" />
-					    	</FXCollections>
-						</items>
-					</ComboBox>
-					<Label>*Artikel:</Label>
-					<TextField fx:id="invoiceElement" styleClass="padding" />
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsnummer:</Label>
+						<TextField fx:id="invoiceID" styleClass="padding" prefWidth="200"/>
+						<ComboBox fx:id="invoiceDirection" promptText="Ausgehend" prefWidth="100">
+							<items>
+						      	<FXCollections fx:factory="observableArrayList">
+						        	<String fx:value="Eingehend" />
+									<String fx:value="Ausgehend" />
+						    	</FXCollections>
+							</items>
+						</ComboBox>	
+					</HBox>			
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsdatum:</Label>
+						<TextField fx:id="invoiceDate" styleClass="padding" prefWidth="200" />
+					</HBox>				
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Kundenname:</Label>
+						<TextField fx:id="invoiceCustomer" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Lieferadresse:</Label>
+						<TextField fx:id="invoiceShippingAddress" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsadresse:</Label>
+						<TextField fx:id="invoiceAddress" styleClass="padding" prefWidth="200" />					
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">Kommentar:</Label>
+						<TextField fx:id="invoiceComment" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">Nachricht:</Label>
+						<TextField fx:id="invoiceMessage" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Artikel:</Label>
+						<TextField fx:id="invoiceElement" styleClass="padding" prefWidth="200" />
+					</HBox>
 				</VBox>
 			</TitledBorder>
-			<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
-			<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Abbruch</Button>
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
+				<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Abbruch</Button>
+			</HBox>
 		</VBox>
 	</Tab>	
 	<Tab text="Suche">
@@ -99,37 +141,54 @@
 			<VBox styleClass="borderedBox">
 				<TitledBorder title="Suche nach Rechnung">
 					<VBox styleClass="textField">
-						<Label>Rechnungsnummer:</Label>
-						<TextField fx:id="searchInvoiceID" styleClass="padding" />				
-						<Label>Rechnungsdatum:</Label>
-						<TextField fx:id="searchInvoiceDate" styleClass="padding" />				
-						<Label>Kundenname:</Label>
-						<TextField fx:id="searchInvoiceCustomer" styleClass="padding" />
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="62">Datum von:</Label>
+							<TextField fx:id="searchInvoiceDateFrom" styleClass="padding" prefWidth="100" />
+							<Label styleClass="searchLabel" prefWidth="20">bis:</Label>	
+							<TextField fx:id="searchInvoiceDateTo" styleClass="padding" prefWidth="100" />			
+						</HBox>
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="62">Betrag von:</Label>
+							<TextField fx:id="searchInvoiceValueFrom" styleClass="padding" prefWidth="100" />
+							<Label styleClass="searchLabel" prefWidth="20">bis:</Label>
+							<TextField fx:id="searchInvoiceValueTo" styleClass="padding" prefWidth="100" />				
+						</HBox>
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="80">Kundenname:</Label>
+							<TextField fx:id="searchInvoiceCustomer" styleClass="padding" prefWidth="200" />
+						</HBox>
 					</VBox>
 				</TitledBorder>
-				<Button fx:id="searchInvoice" onAction="#searchForInvoice" styleClass="createButton">Suchen</Button>
+				<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+					<Button fx:id="searchInvoice" onAction="#searchForInvoice" styleClass="createButton">Suchen</Button>
+				</HBox>
 			</VBox>
 			<VBox styleClass="borderedBox">
 				<TitledBorder title="Suche nach Kunden">
 					<VBox styleClass="textField">
-						<Label>Vorname:</Label>
-						<TextField fx:id="searchCustomerName" styleClass="padding" />				
-						<Label>Nachname:</Label>
-						<TextField fx:id="searchCustomerLastName" styleClass="padding" />				
-						<Label>Firmenname:</Label>
-						<TextField fx:id="searchCustomerCompany" styleClass="padding" />
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="80">Vorname:</Label>
+							<TextField fx:id="searchCustomerName" styleClass="padding" prefWidth="200" />				
+						</HBox>
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="80">Nachname:</Label>
+							<TextField fx:id="searchCustomerLastName" styleClass="padding" prefWidth="200" />				
+						</HBox>
+						<HBox styleClass="hbox">
+							<Label styleClass="searchLabel" prefWidth="80">Firmenname:</Label>
+							<TextField fx:id="searchCustomerCompany" styleClass="padding" prefWidth="200" />
+						</HBox>
 					</VBox>
 				</TitledBorder>
-				<Button fx:id="searchCustomer" onAction="#searchForCustomer" styleClass="createButton">Suchen</Button>
+				<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+					<Button fx:id="searchCustomer" onAction="#searchForCustomer" styleClass="createButton">Suchen</Button>
+				</HBox>
 			</VBox>
 			<VBox styleClass="borderedBox">
 				<VBox>
-						<Button fx:id="slistAllCustomers" onAction="#listAllCustomers" styleClass="createButton">Zeige alle Kunden</Button>
-				</VBox>				
-				<TitledBorder title="Suchergebnisse">					
-					<VBox fx:id="searchResults" styleClass="textField">
-					</VBox>
-				</TitledBorder>
+					<Button fx:id="slistAllCustomers" onAction="#listAllCustomers" styleClass="createButton">Zeige alle Kunden</Button>
+				</VBox>
+				<Label fx:id="messageLabel" />
 			</VBox>
 		</VBox>
 	</Tab>

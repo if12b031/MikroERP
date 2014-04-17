@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import utils.TitledBorder?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="main.SearchController">
+	<VBox>
+		<VBox styleClass="borderedBox">	
+			<TitledBorder title="Suchergebnisse">					
+				<VBox styleClass="textField">
+					<ScrollPane styleClass="scrollPane" prefHeight="250">
+						<VBox fx:id="searchResults">
+						</VBox>
+					</ScrollPane>
+				</VBox>
+			</TitledBorder>
+		</VBox>
+	</VBox>
+</StackPane>
+
+

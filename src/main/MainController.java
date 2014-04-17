@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -9,13 +10,18 @@ import utils.Utils;
 import invoice.Invoice;
 import contacts.Customer;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainController<T> implements Initializable{
 	
@@ -65,7 +71,7 @@ public class MainController<T> implements Initializable{
 	@FXML private TextField searchCustomerCompany;
 	@FXML private Button searchCustomer;
 	@FXML private Button searchInvoice;
-	@FXML private VBox searchResults;
+	@FXML private Label messageLabel;
 	
 	public void initialize(URL url, ResourceBundle resources) {
 		this.presentationModel = new MainModel();
@@ -178,32 +184,9 @@ public class MainController<T> implements Initializable{
 			
 	}
 	
-	@FXML private void listAllCustomers() {		
-		List<Customer> result = proxy.listAllCustomers();		
-		searchResults.getChildren().clear();
-		
-		for(int i=0; i<result.size(); i++) {
-			Label label = new Label();
-			StringBuilder strBuilder = new StringBuilder();
-			
-			strBuilder.append(result.get(i).get_title());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_surname());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_lastname());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_dateOfBirth());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_address());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_plz());
-			strBuilder.append(" ");
-			strBuilder.append(result.get(i).get_city());
-			strBuilder.append(" ");
-
-			label.setText(strBuilder.toString());
-			searchResults.getChildren().add(label);			
-		}		
+	@FXML private void listAllCustomers() {						
+		List<Customer> searchResultList = proxy.listAllCustomers();
+		openSearchWindow(searchResultList);
 	}
 	
 	@FXML private void searchForInvoice() {
@@ -237,5 +220,29 @@ public class MainController<T> implements Initializable{
 			return true;
 		}
 		return false;
+	}
+	
+	private void openSearchWindow(List<Customer> searchResultList) {
+		try {			
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SearchResult.fxml"));
+			StackPane root = (StackPane)fxmlLoader.load();
+			
+			Stage secondStage = new Stage(StageStyle.DECORATED);		
+			Scene scene = new Scene(root, 550, 300);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			secondStage.setScene(scene);
+			secondStage.setTitle("Suchergebnisse");
+			
+			SearchController controller = fxmlLoader.<SearchController>getController();
+			controller.setSearchResultList(searchResultList);
+			secondStage.show();
+			
+			controller.printSearchResults();
+			
+		} catch(NullPointerException e) {
+			messageLabel.setText("No search results found!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
