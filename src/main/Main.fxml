@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?> 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -147,10 +148,40 @@
 						<TextField fx:id="invoiceElementAmount" styleClass="padding" prefWidth="40" />
 						<Button fx:id="addElement" onAction="#addElement" styleClass="createButton">Add</Button> 
 					</HBox>
-					<ScrollPane styleClass="scrollPane" >
-						<VBox fx:id="elementList">
-						</VBox>
-					</ScrollPane>
+					<TableView fx:id="elementTable" prefHeight="100" >
+						<columns>
+							<TableColumn text="Name" prefWidth="105">
+								<cellValueFactory>
+									<PropertyValueFactory property="name" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Preis" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="price" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Menge" prefWidth="55" >
+								<cellValueFactory>
+									<PropertyValueFactory property="amount" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Netto" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="net" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Ust" prefWidth="50" >
+								<cellValueFactory>
+									<PropertyValueFactory property="ust" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Total" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="total" />
+								</cellValueFactory>
+							</TableColumn>
+						</columns>
+					</TableView>
 				</VBox>
 			</TitledBorder>
 			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">

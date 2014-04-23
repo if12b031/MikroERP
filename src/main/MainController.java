@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import models.InvoiceElementModel;
+import models.MainModel;
+import models.TableModel;
 import proxy.Proxy;
 import utils.Utils;
 import invoice.Invoice;
@@ -13,7 +16,7 @@ import invoice.InvoiceElement;
 import contacts.Customer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,9 +25,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -36,7 +39,6 @@ public class MainController<T> implements Initializable{
 	private MainModel presentationModel;
 	private Proxy proxy;
 	private ArrayList<InvoiceElement> tmpInvoiceElements = new ArrayList<InvoiceElement>();
-	private int lastIndex;
 		
 	@FXML TabPane tabPane;
 	
@@ -78,7 +80,7 @@ public class MainController<T> implements Initializable{
 	@FXML private Button addElement;
 	@FXML private ComboBox<T> invoiceDirection;
 	@FXML private Label messageLabelRechnung;
-	@FXML private VBox elementList;
+	@FXML private TableView<InvoiceElementModel> elementTable;
 	
 	/* Variables related to TabPane Suche */
 	@FXML private TextField searchInvoiceDateFrom;
@@ -101,6 +103,8 @@ public class MainController<T> implements Initializable{
 		        clearMessages();
 		    }
 		});
+		elementTable.setPlaceholder(new Text(""));
+		elementTable.setEditable(false);
 		applyBindings();		
 	}
 
@@ -115,6 +119,8 @@ public class MainController<T> implements Initializable{
 		customerBirthday.textProperty().bindBidirectional(presentationModel.customerBirthdayProperty());
 		customerAddress.textProperty().bindBidirectional(presentationModel.customerAddressProperty());
 		customerPLZ.textProperty().bindBidirectional(presentationModel.customerPLZProperty());
+		customerCity.textProperty().bindBidirectional(presentationModel.customerCityProperty());
+		
 		customerCity.textProperty().bindBidirectional(presentationModel.customerCityProperty());
 
 		companyPane.disableProperty().bind(
@@ -138,6 +144,7 @@ public class MainController<T> implements Initializable{
 				customer.set_address(customerAddress.getText());
 				customer.set_plz(Integer.parseInt(customerPLZ.getText()));
 				customer.set_city(customerCity.getText());
+				clearNewCustomer();
 				
 				messageLabelKunde.setText("New Customer created!");
 				System.out.println("New Customer created!");
@@ -185,6 +192,7 @@ public class MainController<T> implements Initializable{
 				invoice.set_invoiceAddress(invoiceAddress.getText());
 				invoice.set_articles(tmpInvoiceElements);
 				tmpInvoiceElements.clear();
+				clearNewInvoice();
 				
 				messageLabelRechnung.setText("New Invoice created!");
 				System.out.println("New Invoice created!");
@@ -192,9 +200,9 @@ public class MainController<T> implements Initializable{
 				messageLabelRechnung.setText("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
 				System.out.println("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
 			} catch(NullPointerException e){
-				messageLabelRechnung.setText("One or more fields in TabPane \"Rechnung\" is empty!");
-				System.out.println("One or more fields in TabPane \"Rechnung\" is empty!");
-			}
+				messageLabelRechnung.setText("One or more required fields in TabPane \"Rechnung\" is empty!");
+				System.out.println("One or more required fields in TabPane \"Rechnung\" is empty!");
+			} 
 		} else{
 			messageLabelRechnung.setText("One or more required fields in TabPane \"Rechnung\" is empty!");
 			System.out.println("One or more required fields in TabPane \"Rechnung\" is empty!");
@@ -214,7 +222,7 @@ public class MainController<T> implements Initializable{
 		invoiceElementAmount.clear();
 		tmpInvoiceElements.clear();
 		messageLabelRechnung.setText("");
-		elementList.getChildren().clear();
+		elementTable.setItems(null);
 	}
 	
 	@FXML private void clearAddElement() {
@@ -223,6 +231,7 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void addElement() {
+		clearMessages();
 		if(checkInvoiceELementInput()){
 			try {
 				InvoiceElement invElem = new InvoiceElement();
@@ -277,14 +286,15 @@ public class MainController<T> implements Initializable{
 	
 	private boolean checkInvoiceInput() {
 		try {
-			if(!Utils.isNullOrEmpty(invoiceID.getText())
+			if(Integer.parseInt(invoiceID.getText()) > 0
 				&& !Utils.isNullOrEmpty(invoiceDate.getText())
+				&& !Utils.isNullOrEmpty((String)invoiceDirection.getValue())
 				&& !Utils.isNullOrEmpty(invoiceCustomer.getText())
 				&& !Utils.isNullOrEmpty(invoiceShippingAddress.getText())
 				&& !Utils.isNullOrEmpty(invoiceAddress.getText())
-				&& !Utils.isNullOrEmpty(invoiceElement.getValue().toString())){
+				&& !elementTable.getItems().isEmpty()){
 				return true;
-			}
+			} 
 		} catch(NumberFormatException e){
 			messageLabelRechnung.setText("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
 			System.out.println("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
@@ -307,6 +317,10 @@ public class MainController<T> implements Initializable{
 		} catch(NullPointerException e){
 			messageLabelRechnung.setText("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
 			System.out.println("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
+		}
+		if(Integer.parseInt(invoiceElementAmount.getText()) <= 0){
+			messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
+			System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
 		}
 		return false;
 	}
@@ -337,30 +351,10 @@ public class MainController<T> implements Initializable{
 	}
 	
 	private void displayInvoiceElements() {
-		final Label label = new Label();
-		StringBuilder strBuilder = new StringBuilder();
-		lastIndex = tmpInvoiceElements.size() - 1;
-			
-		strBuilder.append("ID: ");
-		strBuilder.append(lastIndex);
-		strBuilder.append("  Name: ");
-		strBuilder.append(tmpInvoiceElements.get(lastIndex).get_name());
-		strBuilder.append("  Menge: ");
-		strBuilder.append(tmpInvoiceElements.get(lastIndex).get_amount());
-		strBuilder.append("  Preis: ");
-		strBuilder.append(tmpInvoiceElements.get(lastIndex).get_price());
-		strBuilder.append("  Total: ");
-		strBuilder.append(tmpInvoiceElements.get(lastIndex).get_amount() * tmpInvoiceElements.get(lastIndex).get_price());
-		strBuilder.append(" ");
-			
-		label.setText(strBuilder.toString());
-		label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent e) {
-            	// missing: remove InvoiceElement from tmpInvoiceElements array
-            	elementList.getChildren().remove(label);
-            }
-        });
-		elementList.getChildren().add(label);
+        TableModel tableModel = new TableModel(tmpInvoiceElements);
+		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
+		
+		elementTable.setItems(items);
 	}
 	
 	private void clearMessages() {

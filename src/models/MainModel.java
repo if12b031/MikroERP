@@ -1,4 +1,4 @@
-package main;
+package models;
 
 import utils.Utils;
 import javafx.beans.binding.BooleanBinding;
@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 
 public class MainModel {
 
+	/* Porperties related to Kunde */
 	private StringProperty customerName = new SimpleStringProperty();
 	private StringProperty customerUID = new SimpleStringProperty();
 	private StringProperty customerTitle = new SimpleStringProperty();
