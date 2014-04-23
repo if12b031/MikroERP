@@ -1,5 +1,12 @@
+.message {
+	-fx-text-fill: red;
+	-fx-text-alignment: center;
+}
+
 .scrollPane {
 	-fx-background-color: rgb(255,255,255);
+	-fx-padding: 5;
+	-fx-spacing: 10;
 }
 
 .hbox {

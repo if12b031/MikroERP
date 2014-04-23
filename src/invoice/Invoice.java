@@ -117,7 +117,7 @@ public class Invoice {
 		return _articles;
 	}
 	
-	public void set_articles(ArrayList<InvoiceElement> _articles) {
-		this._articles = _articles;
+	public void set_articles(ArrayList<InvoiceElement> tmpInvoiceElements) {
+		this._articles = tmpInvoiceElements;
 	}
 }
