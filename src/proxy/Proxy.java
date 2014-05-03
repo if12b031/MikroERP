@@ -16,45 +16,6 @@ import contacts.Customer;
 import contacts.CustomerList;
 
 public class Proxy {
-
-	public List<Customer> listAllCustomers() {
-		try {
-			String XMLResponse = "";
-			String buffer;
-			StringBuilder strBuilder = new StringBuilder();
-			XStream xs = new XStream();
-			Socket socket = new Socket("localhost", 8080);
-	        PrintWriter out = new PrintWriter(socket.getOutputStream());
-	        BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                    		socket.getInputStream()));
-			
-	        out.println("GET /MikroERP_Facade/listAllContacts HTTP/1.1");
-			out.flush();	        
-	
-	        while ((buffer = in.readLine()) != null){
-	        	strBuilder.append(buffer);
-	        }
-	        
-	        XMLResponse = strBuilder.toString();
-	        
-	        in.close();
-	        socket.close();
-	        
-	        xs.alias("Customer", Customer.class);
-			xs.alias("CustomerList", CustomerList.class);
-			xs.addImplicitCollection(CustomerList.class, "_customerList");
-			
-	        CustomerList searchResult = (CustomerList) xs.fromXML(XMLResponse);
-	        return searchResult.getCustomers();
-			
-		} catch (IOException e){
-			System.out.println("Failed to create new socket!");
-		} catch (NullPointerException e){
-			System.out.println("No search results!");
-		}
-		return null;
-	}
 	
 	public List<Customer> searchCustomer(String name, String lastName, String company) {
 		try {
@@ -68,7 +29,7 @@ public class Proxy {
                     new InputStreamReader(
                     		socket.getInputStream()));
 			
-	        out.println("GET /MikroERP_Facade/searchContacts HTTP/1.1");
+	        out.println("GET /MikroERP_Facade/listAllContacts HTTP/1.1");
 			out.flush();	        
 	
 	        while ((buffer = in.readLine()) != null){
@@ -133,5 +94,13 @@ public class Proxy {
 			System.out.println("No search results!");
 		}
 		return null;
+	}
+	
+	public void createCustomer(Customer customer) {
+	
+	}
+	
+	public void createInvoice(Invoice invoice) {
+		
 	}
 }

@@ -15,7 +15,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			TabPane root = (TabPane)FXMLLoader.load(getClass().getResource("Main.fxml"));
-			Scene scene = new Scene(root, 550, 700);
+			Scene scene = new Scene(root, 500, 530);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("SWE 2 - MikroERP");

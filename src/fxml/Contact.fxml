@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import utils.TitledBorder?>
+
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="controllers.ContactController">
+	<Tab text="Kunde">		
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Firma">
+				<VBox fx:id="companyPane" styleClass="textField">
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Firmenname:</Label>
+						<TextField fx:id="customerName" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*UID:</Label>
+						<TextField fx:id="customerUID" styleClass="padding" prefWidth="200" />
+					</HBox>				
+				</VBox>
+			</TitledBorder>			
+			<TitledBorder title="Person">
+				<VBox fx:id="personPane" styleClass="textField">
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Titel</Label>
+						<TextField fx:id="customerTitle" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Vorname:</Label>
+						<TextField fx:id="customerSurname" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Nachname:</Label>
+						<TextField fx:id="customerLastname" styleClass="padding" prefWidth="200" />						
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Suffix:</Label>
+						<TextField fx:id="customerSuffix" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Arbeitet bei:</Label>
+						<TextField fx:id="customerWorksAt" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">Geboren am:</Label>
+						<TextField fx:id="customerBirthday" styleClass="padding" prefWidth="200" />
+						<Label styleClass="customerLabel" prefWidth="100">(YYYY-MM-DD)</Label>
+					</HBox>				
+				</VBox>
+			</TitledBorder>			
+			<TitledBorder title="Adresse">
+				<VBox styleClass="textField">
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Strasse:</Label>
+						<TextField fx:id="customerAddress" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*PLZ:</Label>
+						<TextField fx:id="customerPLZ" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="customerLabel" prefWidth="80">*Ort:</Label>
+						<TextField fx:id="customerCity" styleClass="padding" prefWidth="200" />
+					</HBox>		
+				</VBox>
+			</TitledBorder>			
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="createCustomer" onAction="#createNewCustomer" styleClass="createButton">Anlegen</Button>
+				<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Abbruch</Button>
+			</HBox>
+			<HBox styleClass="hbox" alignment="BASELINE_CENTER">
+				<Label fx:id="messageLabelKunde" styleClass="message" />
+			</HBox>
+		</VBox>
+	</Tab>
+</TabPane>

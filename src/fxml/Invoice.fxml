@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import utils.TitledBorder?>
+
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="controllers.InvoiceController">
+	<Tab text="Rechnung">
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Neue Rechnung">
+				<VBox styleClass="textField">
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsnummer:</Label>
+						<TextField fx:id="invoiceID" styleClass="padding" prefWidth="200"/>
+						<ComboBox fx:id="invoiceDirection" promptText="Richtung" prefWidth="100">
+							<items>
+						      	<FXCollections fx:factory="observableArrayList">
+						        	<String fx:value="Eingehend" />
+									<String fx:value="Ausgehend" />
+						    	</FXCollections>
+							</items>
+						</ComboBox>	
+					</HBox>			
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsdatum:</Label>
+						<TextField fx:id="invoiceDate" styleClass="padding" prefWidth="200" />
+						<Label styleClass="customerLabel" prefWidth="100">(YYYY-MM-DD)</Label>
+					</HBox>				
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Kundenname:</Label>
+						<TextField fx:id="invoiceCustomer" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Lieferadresse:</Label>
+						<TextField fx:id="invoiceShippingAddress" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsadresse:</Label>
+						<TextField fx:id="invoiceAddress" styleClass="padding" prefWidth="200" />					
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">Kommentar:</Label>
+						<TextField fx:id="invoiceComment" styleClass="padding" prefWidth="200" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">Nachricht:</Label>
+						<TextArea fx:id="invoiceMessage" styleClass="padding" prefWidth="200" prefRowCount="5" wrapText="TRUE" />
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="invoiceLabel" prefWidth="120">*Artikel:</Label>
+						<ComboBox fx:id="invoiceElement" promptText="Bezeichnung" prefWidth="100">
+							<items>
+						      	<FXCollections fx:factory="observableArrayList">
+						        	<String fx:value="Art1" />
+									<String fx:value="Art2" />
+									<String fx:value="Art3" />
+									<String fx:value="Art4" />
+									<String fx:value="Art5" />
+						    	</FXCollections>
+							</items>
+						</ComboBox>
+						<Label styleClass="invoiceLabel">Menge:</Label>
+						<TextField fx:id="invoiceElementAmount" styleClass="padding" prefWidth="40" />
+						<Button fx:id="addElement" onAction="#addElement" styleClass="createButton">Add</Button> 
+					</HBox>
+					<TableView fx:id="elementTable" prefHeight="100" >
+						<columns>
+							<TableColumn text="Name" prefWidth="105">
+								<cellValueFactory>
+									<PropertyValueFactory property="name" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Preis" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="price" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Menge" prefWidth="55" >
+								<cellValueFactory>
+									<PropertyValueFactory property="amount" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Netto" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="net" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Ust" prefWidth="50" >
+								<cellValueFactory>
+									<PropertyValueFactory property="ust" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Total" prefWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="total" />
+								</cellValueFactory>
+							</TableColumn>
+						</columns>
+					</TableView>
+				</VBox>
+			</TitledBorder>
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
+				<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Abbruch</Button>
+			</HBox>
+			<HBox styleClass="hbox" alignment="BASELINE_CENTER">
+				<Label fx:id="messageLabelRechnung" styleClass="message" />
+			</HBox>
+		</VBox>
+	</Tab>
+</TabPane>
