@@ -2,10 +2,11 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import models.MainModel;
+import models.MainPresentationModel;
 import proxy.Proxy;
 import invoice.Invoice;
 import contacts.Customer;
@@ -24,7 +25,7 @@ import javafx.stage.StageStyle;
 
 public class MainController<T> implements Initializable{
 	
-	private MainModel presentationModel;
+	private MainPresentationModel presentationModel;
 	private Proxy proxy;
 		
 	@FXML TabPane tabPane;
@@ -46,7 +47,7 @@ public class MainController<T> implements Initializable{
 	@FXML private Label messageLabelSuche;
 	
 	public void initialize(URL url, ResourceBundle resources) {
-		this.presentationModel = new MainModel();
+		this.presentationModel = new MainPresentationModel();
 		this.proxy = new Proxy();
 		tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		    public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
@@ -88,31 +89,52 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForInvoice() {
-		List<Invoice> searchResultList = proxy.searchInvoice(searchInvoiceDateFrom.getText(),
+		ArrayList<Invoice> searchResultList = (ArrayList<Invoice>) proxy.searchInvoice(searchInvoiceDateFrom.getText(),
 											searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), searchInvoiceValueTo.getText(),
 											searchInvoiceCustomer.getText());
 		if(searchResultList == null) {
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}
-		
-		for(int i = 0; i < searchResultList.size(); i++) {
-			openInvoiceWindow(searchResultList.get(i));
-		}
+		openInvoiceWindow(searchResultList);
 	}
 	
 	@FXML private void newInvoice() {
 		Invoice invoice = new Invoice();		
-		openInvoiceWindow(invoice);
+		openEmptyInvoiceWindow(invoice);
 	}
 	
-	private void openInvoiceWindow(Invoice searchResult) {		
-		if(searchResult == null){
+	private void openInvoiceWindow(ArrayList<Invoice> searchResultList) {		
+		if(searchResultList.size() < 1){
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}		
 		try {			
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Invoice.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SearchresultInvoice.fxml"));
+			TabPane root = (TabPane)fxmlLoader.load();
+			
+			Stage secondStage = new Stage(StageStyle.DECORATED);		
+			Scene scene = new Scene(root, 550, 700);
+			scene.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
+			secondStage.setScene(scene);
+			secondStage.setTitle("SWE 2 - MikroERP");
+			
+			SearchresultInvoiceController controller = fxmlLoader.<SearchresultInvoiceController>getController();
+			//controller.setSearchResultList(searchResultList);
+			//controller.displaySearchresult();
+			secondStage.show();	
+			
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	private void openEmptyInvoiceWindow(Invoice searchResult) {		
+		if(searchResult == null){
+			return;
+		}		
+		try {			
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Invoice.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
@@ -137,7 +159,7 @@ public class MainController<T> implements Initializable{
 			return;
 		}		
 		try {			
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../fxml/Contact.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contact.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import models.InvoiceElementModel;
-import models.InvoiceModel;
-import models.TableModel;
+import models.InvoicePresentationModel;
+import models.InvoiceTableModel;
 import proxy.Proxy;
 import utils.Utils;
 import invoice.Invoice;
@@ -25,9 +25,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-public class InvoiceController<T> implements Initializable{
+public class InvoiceController<T> implements Initializable {
 	
-	private InvoiceModel presentationModel;
+	private InvoicePresentationModel presentationModel;
 	private Proxy proxy;
 	private ArrayList<InvoiceElement> tmpInvoiceElements = new ArrayList<InvoiceElement>();
 	private Invoice searchResult;
@@ -52,7 +52,7 @@ public class InvoiceController<T> implements Initializable{
 	@FXML private TableView<InvoiceElementModel> elementTable;
 	
 	public void initialize(URL url, ResourceBundle resources) {
-		this.presentationModel = new InvoiceModel();
+		this.presentationModel = new InvoicePresentationModel();
 		this.proxy = new Proxy();
 		tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		    public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
@@ -193,7 +193,7 @@ public class InvoiceController<T> implements Initializable{
 	}
 	
 	private void displayInvoiceElements() {
-        TableModel tableModel = new TableModel(tmpInvoiceElements);
+        InvoiceTableModel tableModel = new InvoiceTableModel(tmpInvoiceElements);
 		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
 		
 		elementTable.setItems(items);

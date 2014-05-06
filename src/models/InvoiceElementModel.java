@@ -25,6 +25,7 @@ public class InvoiceElementModel {
 		this.ust.set(this.net.get() / 100 * 20); //20% ust
 		this.total.set(this.net.get() + this.ust.get());
 	}
+	
 	/* Getters for Properties */
 	public void setTotal(SimpleFloatProperty total) {
 		this.total = total;
@@ -54,48 +55,53 @@ public class InvoiceElementModel {
 		return total;
 	}
 	
+	
 	/*	Getters and Setters	*/
-	public StringProperty getName() {
-		return name;
+	public String getName() {
+		return name.get();
 	}
 	
-	public void setName(SimpleStringProperty name) {
-		this.name = name;
+	public void setName(String name) {
+		this.name.set(name);
 	}
 	
-	public FloatProperty getPrice() {
-		return price;
+	public float getPrice() {
+		return price.get();
 	}
 	
-	public void setPrice(SimpleFloatProperty price) {
-		this.price = price;
+	public void setPrice(float price) {
+		this.price.set(price);
 	}
 	
-	public IntegerProperty getAmount() {
-		return amount;
+	public int getAmount() {
+		return amount.get();
 	}
 	
-	public void setAmount(SimpleIntegerProperty amount) {
-		this.amount = amount;
+	public void setAmount(int amount) {
+		this.amount.set(amount);
 	}
 	
-	public FloatProperty getNet() {
-		return net;
+	public float getNet() {
+		return net.get();
 	}
 	
-	public void setNet(SimpleFloatProperty net) {
-		this.net = net;
+	public void setNet(float net) {
+		this.net.set(net);
 	}
 	
-	public FloatProperty getUst() {
-		return ust;
+	public float getUst() {
+		return ust.get();
 	}
 	
-	public void setUst(SimpleFloatProperty ust) {
-		this.ust = ust;
+	public void setUst(float ust) {
+		this.ust.set(ust);
 	}
 	
-	public FloatProperty getTotal() {
-		return total;
+	public float getTotal() {
+		return total.get();
+	}
+	
+	public void setTotal(float total) {
+		this.total.set(total);
 	}
 }

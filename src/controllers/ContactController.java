@@ -12,14 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import models.ContactModel;
+import models.ContactPresentationModel;
 import proxy.Proxy;
 import utils.Utils;
 import contacts.Customer;
 
 public class ContactController<T> implements Initializable{
 	
-	private ContactModel presentationModel;
+	private ContactPresentationModel presentationModel;
 	private Proxy proxy;
 	private Customer searchResult;
 		
@@ -44,7 +44,7 @@ public class ContactController<T> implements Initializable{
 	@FXML private Label messageLabelKunde;
 	
 	public void initialize(URL url, ResourceBundle resources) {
-		this.presentationModel = new ContactModel();
+		this.presentationModel = new ContactPresentationModel();
 		this.proxy = new Proxy();
 		tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		    public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {

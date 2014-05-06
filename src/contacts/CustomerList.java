@@ -1,11 +1,10 @@
 package contacts;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CustomerList {
 
-	private List<Customer> _customerList;
+	private ArrayList<Customer> _customerList;
 
     public CustomerList(){
     	_customerList = new ArrayList<Customer>();
@@ -15,7 +14,7 @@ public class CustomerList {
     	_customerList.add(c);
     }
     
-    public List<Customer> getCustomers() {
+    public ArrayList<Customer> getCustomers() {
     	return _customerList;
     }
 }

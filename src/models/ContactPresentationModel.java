@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ContactModel {
+public class ContactPresentationModel {
 
 	/* Porperties related to Kunde */
 	private StringProperty customerName = new SimpleStringProperty();
@@ -53,7 +53,7 @@ public class ContactModel {
 		}
 	};
 
-	public ContactModel() {
+	public ContactPresentationModel() {
 		ChangeListener<String> canEditListener = new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,

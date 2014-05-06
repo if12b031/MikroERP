@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -17,7 +17,7 @@ import contacts.CustomerList;
 
 public class Proxy {
 	
-	public List<Customer> searchCustomer(String name, String lastName, String company) {
+	public ArrayList<Customer> searchCustomer(String name, String lastName, String company) {
 		try {
 			String XMLResponse = "";
 			String buffer;
@@ -56,9 +56,9 @@ public class Proxy {
 		return null;
 	}
 	
-	public List<Invoice> searchInvoice(String dateFrom, String dateTo, String ValueFrom,
+	public ArrayList<Invoice> searchInvoice(String dateFrom, String dateTo, String ValueFrom,
 											String ValueTo, String customer) {
-		try {
+		/*try {
 			String XMLResponse = "";
 			String buffer;
 			StringBuilder strBuilder = new StringBuilder();
@@ -92,8 +92,25 @@ public class Proxy {
 			System.out.println("Failed to create new socket!");
 		} catch (NullPointerException e){
 			System.out.println("No search results!");
-		}
-		return null;
+		}*/
+		
+		InvoiceList i = new InvoiceList();
+		Invoice c = new Invoice();
+		c.set_invoiceNumber(1012);
+		c.set_customerName("Georg");
+		c.set_isOutgoing(true);
+		c.set_creationDate("2001-01-05");
+		c.set_net(100.00);
+		c.set_ust(20.00);
+		c.set_gross(120.00);
+		i.add(c);
+		i.add(c);
+		i.add(c);
+		i.add(c);
+		i.add(c);
+		i.add(c);
+		i.add(c);
+		return i.getInvoices();
 	}
 	
 	public void createCustomer(Customer customer) {

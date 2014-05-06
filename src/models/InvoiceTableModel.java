@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class TableModel {
+public class InvoiceTableModel {
 		
 	private ArrayList<InvoiceElement> a;
 	
-	public TableModel(ArrayList<InvoiceElement> a) {
+	public InvoiceTableModel(ArrayList<InvoiceElement> a) {
 		this.a = a;
 	}	
 	
