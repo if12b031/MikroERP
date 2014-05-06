@@ -114,14 +114,14 @@ public class MainController<T> implements Initializable{
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 700);
-			scene.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
+			Scene scene = new Scene(root, 663, 530);
+			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
 			SearchresultInvoiceController controller = fxmlLoader.<SearchresultInvoiceController>getController();
-			//controller.setSearchResultList(searchResultList);
-			//controller.displaySearchresult();
+			controller.setSearchResultList(searchResultList);
+			controller.displaySearchresult();
 			secondStage.show();	
 			
 		} catch (IOException e){
@@ -139,7 +139,7 @@ public class MainController<T> implements Initializable{
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
 			Scene scene = new Scene(root, 550, 700);
-			scene.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
@@ -164,7 +164,7 @@ public class MainController<T> implements Initializable{
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
 			Scene scene = new Scene(root, 550, 700);
-			scene.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
 			

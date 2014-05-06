@@ -96,8 +96,9 @@ public class Proxy {
 		
 		InvoiceList i = new InvoiceList();
 		Invoice c = new Invoice();
-		c.set_invoiceNumber(1012);
+		c.set_invoiceNumber(12);
 		c.set_customerName("Georg");
+		c.set_customerLastname("Huszar");
 		c.set_isOutgoing(true);
 		c.set_creationDate("2001-01-05");
 		c.set_net(100.00);

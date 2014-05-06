@@ -15,39 +15,39 @@
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Suchergebnisse">
 				<VBox styleClass="textField">
-					<TableView fx:id="searchresultTable" prefHeight="100" >
+					<TableView fx:id="searchresultTable" prefHeight="400" >
 						<columns>
-							<TableColumn text="Rechnungsnummer" prefWidth="105">
+							<TableColumn text="Nr." prefWidth="65">
 								<cellValueFactory>
 									<PropertyValueFactory property="id" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Erstellungsdatum" prefWidth="80" >
+							<TableColumn text="Erstellt" prefWidth="80" >
 								<cellValueFactory>
 									<PropertyValueFactory property="creationDate" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Kundenname" prefWidth="80" >
+							<TableColumn text="Kundenname" prefWidth="150" >
 								<cellValueFactory>
 									<PropertyValueFactory property="name" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Ein-/AUsgehend" prefWidth="55" >
+							<TableColumn text="Ein-/Ausgehend" prefWidth="110" >
 								<cellValueFactory>
 									<PropertyValueFactory property="outgoing" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Netto" prefWidth="80" >
+							<TableColumn text="Netto" prefWidth="65" >
 								<cellValueFactory>
 									<PropertyValueFactory property="net" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Ust" prefWidth="50" >
+							<TableColumn text="Ust" prefWidth="65" >
 								<cellValueFactory>
 									<PropertyValueFactory property="ust" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Total" prefWidth="80" >
+							<TableColumn text="Total" prefWidth="65" >
 								<cellValueFactory>
 									<PropertyValueFactory property="total" />
 								</cellValueFactory>

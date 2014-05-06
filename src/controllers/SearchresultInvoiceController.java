@@ -30,15 +30,11 @@ public class SearchresultInvoiceController implements Initializable {
 	public void initialize(URL url, ResourceBundle resources) {
 		searchresultTable.setPlaceholder(new Text(""));
 		searchresultTable.setEditable(false);
-		applyBindings();		
+		applyBindings();
 	}
 	
 	private void applyBindings() {
 	
-	}
-	
-	public SearchresultInvoiceController(ArrayList<Invoice> list) {
-		this.searchresultList = list;
 	}
 	
 	public void displaySearchresult() {
