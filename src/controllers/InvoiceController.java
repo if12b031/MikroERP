@@ -14,6 +14,7 @@ import invoice.InvoiceElement;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,6 +24,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -87,7 +90,9 @@ public class InvoiceController<T> implements Initializable {
 		presentationModel.setInvoiceComment(searchResult.get_comment());
 		presentationModel.setInvoiceMessage(searchResult.get_message());
 		
-		this.tmpInvoiceElements = searchResult.get_articles();
+		if(searchResult.get_articles() != null){
+			this.tmpInvoiceElements = searchResult.get_articles();
+		}
 		displayInvoiceElements();
 		
 		if(searchResult.is_isOutgoing()){
@@ -211,6 +216,16 @@ public class InvoiceController<T> implements Initializable {
 		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
 		
 		elementTable.setItems(items);
+		elementTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event) {
+			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
+			    	int index = elementTable.getSelectionModel().getSelectedIndex();
+			    	tmpInvoiceElements.remove(index);
+			    	displayInvoiceElements();
+			    }
+			}
+		});
 	}
 	
 	private void clearAddElement() {

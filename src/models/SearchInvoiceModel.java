@@ -18,13 +18,9 @@ public class SearchInvoiceModel {
 	private DoubleProperty ust= new SimpleDoubleProperty();
 	private DoubleProperty total = new SimpleDoubleProperty();
 	
-	public SearchInvoiceModel(int id, String name, String lastname, String creationDate, boolean outgoing, double ust, double net, double total){
+	public SearchInvoiceModel(int id, String name, String creationDate, boolean outgoing, double ust, double net, double total){
 		this.id.set(id);
-		if(lastname != null) {
-			this.name.set(name + lastname);
-		} else{
-			this.name.set(name);
-		}
+		this.name.set(name);
 		this.creationDate.set(creationDate);
 		if (outgoing == true){
 			this.outgoing.set("Ausgehend");
