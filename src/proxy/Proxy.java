@@ -1,6 +1,7 @@
 package proxy;
 
 import invoice.Invoice;
+import invoice.InvoiceElement;
 import invoice.InvoiceList;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ import contacts.CustomerList;
 public class Proxy {
 	
 	public ArrayList<Customer> searchCustomer(String name, String lastName, String company) {
-		try {
+		/*try {
 			String XMLResponse = "";
 			String buffer;
 			StringBuilder strBuilder = new StringBuilder();
@@ -52,8 +53,25 @@ public class Proxy {
 			System.out.println("Failed to create new socket!");
 		} catch (NullPointerException e){
 			System.out.println("No search results!");
-		}
-		return null;
+		}*/
+		
+		CustomerList c = new CustomerList();
+		Customer m = new Customer();
+		m.set_title("Dr.");
+		m.set_surname("Georg");
+		m.set_lastname("Huszar");
+		m.set_dateOfBirth("1992-01-18");
+		m.set_address("Weizenweg 14");
+		m.set_plz(1220);
+		m.set_city("Wien");		
+		c.add(m);
+		c.add(m);
+		c.add(m);
+		c.add(m);
+		c.add(m);
+		c.add(m);
+		c.add(m);
+		return c.getCustomers();
 	}
 	
 	public ArrayList<Invoice> searchInvoice(String dateFrom, String dateTo, String ValueFrom,
@@ -96,6 +114,18 @@ public class Proxy {
 		
 		InvoiceList i = new InvoiceList();
 		Invoice c = new Invoice();
+		InvoiceElement e = new InvoiceElement();
+		ArrayList<InvoiceElement> a = new ArrayList<InvoiceElement>();
+		e.set_name("Hose");
+		e.set_amount(5);
+		e.set_price(99.90);
+		a.add(e);
+		a.add(e);
+		a.add(e);
+		a.add(e);
+		a.add(e);
+		a.add(e);
+		a.add(e);
 		c.set_invoiceNumber(12);
 		c.set_customerName("Georg");
 		c.set_customerLastname("Huszar");
@@ -104,6 +134,7 @@ public class Proxy {
 		c.set_net(100.00);
 		c.set_ust(20.00);
 		c.set_gross(120.00);
+		c.set_articles(a);
 		i.add(c);
 		i.add(c);
 		i.add(c);

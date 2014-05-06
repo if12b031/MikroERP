@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import models.MainPresentationModel;
@@ -71,21 +70,19 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForCustomer() {	
-		List<Customer> searchResultList = proxy.searchCustomer(searchCustomerName.getText(),
+		ArrayList<Customer> searchResultList = proxy.searchCustomer(searchCustomerName.getText(),
 											searchCustomerLastName.getText(), searchCustomerCompany.getText());
 		if(searchResultList == null) {
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}
 		
-		for(int i = 0; i < searchResultList.size(); i++) {
-			openCustomerWindow(searchResultList.get(i));
-		}
+		openCustomerWindow(searchResultList);
 	}
 	
 	@FXML private void newCustomer() {
 		Customer customer = new Customer();
-		openCustomerWindow(customer);
+		openEmptyCustomerWindow(customer);
 	}
 	
 	@FXML private void searchForInvoice() {
@@ -114,7 +111,7 @@ public class MainController<T> implements Initializable{
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 663, 530);
+			Scene scene = new Scene(root, 666, 530);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
@@ -145,7 +142,6 @@ public class MainController<T> implements Initializable{
 			
 			InvoiceController<?> controller = fxmlLoader.<InvoiceController<?>>getController();
 			controller.setSearchResult(searchResult);
-			controller.displaySearchResult();
 			secondStage.show();	
 			
 		} catch (IOException e){
@@ -153,13 +149,38 @@ public class MainController<T> implements Initializable{
 		}
 	}
 	
-	private void openCustomerWindow(Customer searchResult) {		
+	private void openCustomerWindow(ArrayList<Customer> searchResult) {		
+		if(searchResult.size() < 1){
+			messageLabelSuche.setText("No search results found!");
+			return;
+		}		
+		try {			
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SearchresultCustomer.fxml"));
+			TabPane root = (TabPane)fxmlLoader.load();
+			
+			Stage secondStage = new Stage(StageStyle.DECORATED);		
+			Scene scene = new Scene(root, 666, 530);
+			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
+			secondStage.setScene(scene);
+			secondStage.setTitle("SWE 2 - MikroERP");
+			
+			SearchresultCustomerController controller = fxmlLoader.<SearchresultCustomerController>getController();
+			controller.setSearchResultList(searchResult);
+			controller.displaySearchresult();
+			secondStage.show();			
+			
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	private void openEmptyCustomerWindow(Customer searchResult) {		
 		if(searchResult == null){
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}		
 		try {			
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Contact.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Customer.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
@@ -168,9 +189,8 @@ public class MainController<T> implements Initializable{
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
-			ContactController<?> controller = fxmlLoader.<ContactController<?>>getController();
+			CustomerController controller = fxmlLoader.<CustomerController>getController();
 			controller.setSearchResult(searchResult);
-			controller.displaySearchResult();
 			secondStage.show();			
 			
 		} catch (IOException e){

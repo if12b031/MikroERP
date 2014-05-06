@@ -12,14 +12,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import models.ContactPresentationModel;
+import javafx.stage.Stage;
+import models.CustomerPresentationModel;
 import proxy.Proxy;
 import utils.Utils;
 import contacts.Customer;
 
-public class ContactController<T> implements Initializable{
+public class CustomerController implements Initializable{
 	
-	private ContactPresentationModel presentationModel;
+	private CustomerPresentationModel presentationModel;
 	private Proxy proxy;
 	private Customer searchResult;
 		
@@ -41,10 +42,11 @@ public class ContactController<T> implements Initializable{
 	@FXML private VBox personPane;
 	@FXML private Button createCustomer;
 	@FXML private Button clearCustomer;
+	@FXML private Button cancelCustomer;
 	@FXML private Label messageLabelKunde;
 	
 	public void initialize(URL url, ResourceBundle resources) {
-		this.presentationModel = new ContactPresentationModel();
+		this.presentationModel = new CustomerPresentationModel();
 		this.proxy = new Proxy();
 		tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 		    public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
@@ -74,7 +76,7 @@ public class ContactController<T> implements Initializable{
 				presentationModel.disableEditPersonBinding());
 	}
 	
-	public void displaySearchResult() {
+	public void displaySearchresult() {
 		presentationModel.setCustomerName(searchResult.get_name());
 		presentationModel.setCustomerUID(searchResult.get_uid());
 		presentationModel.setCustomerTitle(searchResult.get_title());
@@ -126,6 +128,11 @@ public class ContactController<T> implements Initializable{
 	
 	@FXML private void clearNewCustomer() {
 		presentationModel.clearCustomer();
+	}
+	
+	@FXML private void cancelNewCustomer() {
+		Stage stage = (Stage) cancelCustomer.getScene().getWindow();
+	    stage.close();
 	}
 			
 	private boolean checkCustomerInput() {

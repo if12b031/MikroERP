@@ -24,6 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class InvoiceController<T> implements Initializable {
 	
@@ -46,6 +47,7 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private TextField invoiceElementAmount;
 	@FXML private Button createInvoice;
 	@FXML private Button clearInvoice;
+	@FXML private Button cancelInvoice;
 	@FXML private Button addElement;
 	@FXML private ComboBox<T> invoiceDirection;
 	@FXML private Label messageLabelRechnung;
@@ -65,11 +67,34 @@ public class InvoiceController<T> implements Initializable {
 	}
 
 	private void applyBindings() {
-		
+		invoiceID.textProperty().bindBidirectional(presentationModel.invoiceIDProperty());
+		invoiceDate.textProperty().bindBidirectional(presentationModel.invoiceDateProperty());
+		invoiceCustomer.textProperty().bindBidirectional(presentationModel.invoiceCustomerProperty());
+		invoiceShippingAddress.textProperty().bindBidirectional(presentationModel.invoiceShippingAddressProperty());
+		invoiceAddress.textProperty().bindBidirectional(presentationModel.invoiceAddressProperty());
+		invoiceComment.textProperty().bindBidirectional(presentationModel.invoiceCommentProperty());
+		invoiceMessage.textProperty().bindBidirectional(presentationModel.invoiceMessageProperty());
+		invoiceElementAmount.textProperty().bindBidirectional(presentationModel.invoiceElementAmountProperty());
+		messageLabelRechnung.textProperty().bindBidirectional(presentationModel.messageLabelProperty());
 	}
 	
-	public void displaySearchResult() {
+	public void displaySearchresult() {
+		presentationModel.setInvoiceID(Integer.toString(searchResult.get_invoiceNumber()));
+		presentationModel.setInvoiceDate(searchResult.get_creationDate());
+		presentationModel.setInvoiceCustomer(searchResult.get_customerName());
+		presentationModel.setInvoiceShippingAddress(searchResult.get_shippingAddress());
+		presentationModel.setInvoiceAddress(searchResult.get_invoiceAddress());
+		presentationModel.setInvoiceComment(searchResult.get_comment());
+		presentationModel.setInvoiceMessage(searchResult.get_message());
 		
+		this.tmpInvoiceElements = searchResult.get_articles();
+		displayInvoiceElements();
+		
+		if(searchResult.is_isOutgoing()){
+			invoiceDirection.setValue((T) "Ausgehend");
+		} else{
+			invoiceDirection.setValue((T) "Eingehend");
+		}
 	}
 	
 	@FXML private void createNewInvoice() {
@@ -112,24 +137,13 @@ public class InvoiceController<T> implements Initializable {
 	}
 	
 	@FXML private void clearNewInvoice() {
-		invoiceID.clear();
-		invoiceDirection.getSelectionModel().clearSelection();
-		invoiceDate.clear();
-		invoiceCustomer.clear();
-		invoiceShippingAddress.clear();
-		invoiceAddress.clear();
-		invoiceComment.clear();
-		invoiceMessage.clear();
-		invoiceElement.getSelectionModel().clearSelection();
-		invoiceElementAmount.clear();
-		tmpInvoiceElements.clear();
-		messageLabelRechnung.setText("");
+		presentationModel.clearInvoice();
 		elementTable.setItems(null);
 	}
 	
-	@FXML private void clearAddElement() {
-		invoiceElement.getSelectionModel().clearSelection();
-		invoiceElementAmount.clear();
+	@FXML private void cancelNewInvoice() {
+		Stage stage = (Stage) cancelInvoice.getScene().getWindow();
+	    stage.close();
 	}
 	
 	@FXML private void addElement() {
@@ -197,6 +211,11 @@ public class InvoiceController<T> implements Initializable {
 		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
 		
 		elementTable.setItems(items);
+	}
+	
+	private void clearAddElement() {
+		invoiceElement.getSelectionModel().clearSelection();
+		invoiceElementAmount.clear();
 	}
 	
 	private void clearMessages() {

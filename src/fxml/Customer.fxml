@@ -10,7 +10,7 @@
 <?import utils.TitledBorder?>
 
 <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
-	fx:controller="controllers.ContactController">
+	fx:controller="controllers.CustomerController">
 	<Tab text="Kunde">		
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Firma">
@@ -72,7 +72,8 @@
 			</TitledBorder>			
 			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
 				<Button fx:id="createCustomer" onAction="#createNewCustomer" styleClass="createButton">Anlegen</Button>
-				<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Abbruch</Button>
+				<Button fx:id="clearCustomer" onAction="#clearNewCustomer" styleClass="createButton">Leeren</Button>
+				<Button fx:id="cancelCustomer" onAction="#cancelNewCustomer" styleClass="createButton">Abbruch</Button>
 			</HBox>
 			<HBox styleClass="hbox" alignment="BASELINE_CENTER">
 				<Label fx:id="messageLabelKunde" styleClass="message" />

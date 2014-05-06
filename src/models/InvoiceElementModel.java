@@ -1,23 +1,23 @@
 package models;
 
-import javafx.beans.property.FloatProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class InvoiceElementModel {
 
-	/* Porperties related to Rechnung */
+	/* Properties related to Rechnung */
 	private StringProperty name = new SimpleStringProperty();
-	private FloatProperty price = new SimpleFloatProperty();
+	private DoubleProperty price = new SimpleDoubleProperty();
 	private IntegerProperty amount = new SimpleIntegerProperty();
-	private FloatProperty net = new SimpleFloatProperty();
-	private FloatProperty ust= new SimpleFloatProperty();
-	private FloatProperty total = new SimpleFloatProperty();
+	private DoubleProperty net = new SimpleDoubleProperty();
+	private DoubleProperty ust= new SimpleDoubleProperty();
+	private DoubleProperty total = new SimpleDoubleProperty();
 	
-	public InvoiceElementModel(String name, float price, int amount){
+	public InvoiceElementModel(String name, double price, int amount){
 		this.name.set(name);
 		this.price.set(price);
 		this.amount.set(amount);
@@ -27,7 +27,7 @@ public class InvoiceElementModel {
 	}
 	
 	/* Getters for Properties */
-	public void setTotal(SimpleFloatProperty total) {
+	public void setTotal(SimpleDoubleProperty total) {
 		this.total = total;
 	}
 	
@@ -39,19 +39,19 @@ public class InvoiceElementModel {
 		return amount;
 	}
 	
-	public final FloatProperty priceProperty() {
+	public final DoubleProperty priceProperty() {
 		return price;
 	}
 
-	public final FloatProperty netProperty() {
+	public final DoubleProperty netProperty() {
 		return net;
 	}
 	
-	public final FloatProperty ustProperty() {
+	public final DoubleProperty ustProperty() {
 		return ust;
 	}
 
-	public final FloatProperty totalProperty() {
+	public final DoubleProperty totalProperty() {
 		return total;
 	}
 	
@@ -65,11 +65,11 @@ public class InvoiceElementModel {
 		this.name.set(name);
 	}
 	
-	public float getPrice() {
+	public double getPrice() {
 		return price.get();
 	}
 	
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price.set(price);
 	}
 	
@@ -81,27 +81,27 @@ public class InvoiceElementModel {
 		this.amount.set(amount);
 	}
 	
-	public float getNet() {
+	public double getNet() {
 		return net.get();
 	}
 	
-	public void setNet(float net) {
+	public void setNet(double net) {
 		this.net.set(net);
 	}
 	
-	public float getUst() {
+	public double getUst() {
 		return ust.get();
 	}
 	
-	public void setUst(float ust) {
+	public void setUst(double ust) {
 		this.ust.set(ust);
 	}
 	
-	public float getTotal() {
+	public double getTotal() {
 		return total.get();
 	}
 	
-	public void setTotal(float total) {
+	public void setTotal(double total) {
 		this.total.set(total);
 	}
 }

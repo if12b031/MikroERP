@@ -71,32 +71,32 @@
 					</HBox>
 					<TableView fx:id="elementTable" prefHeight="100" >
 						<columns>
-							<TableColumn text="Name" prefWidth="105">
+							<TableColumn text="Name" prefWidth="125" minWidth="125" >
 								<cellValueFactory>
 									<PropertyValueFactory property="name" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Preis" prefWidth="80" >
+							<TableColumn text="Preis" prefWidth="80" minWidth="80" >
 								<cellValueFactory>
 									<PropertyValueFactory property="price" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Menge" prefWidth="55" >
+							<TableColumn text="Menge" prefWidth="55" minWidth="60" >
 								<cellValueFactory>
 									<PropertyValueFactory property="amount" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Netto" prefWidth="80" >
+							<TableColumn text="Netto" prefWidth="80" minWidth="80" >
 								<cellValueFactory>
 									<PropertyValueFactory property="net" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Ust" prefWidth="50" >
+							<TableColumn text="Ust" prefWidth="50" minWidth="60" >
 								<cellValueFactory>
 									<PropertyValueFactory property="ust" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Total" prefWidth="80" >
+							<TableColumn text="Total" prefWidth="80" minWidth="80" >
 								<cellValueFactory>
 									<PropertyValueFactory property="total" />
 								</cellValueFactory>
@@ -107,7 +107,8 @@
 			</TitledBorder>
 			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
 				<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
-				<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Abbruch</Button>
+				<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Leeren</Button>
+				<Button fx:id="cancelInvoice" onAction="#cancelNewInvoice" styleClass="createButton">Abbruch</Button>
 			</HBox>
 			<HBox styleClass="hbox" alignment="BASELINE_CENTER">
 				<Label fx:id="messageLabelRechnung" styleClass="message" />

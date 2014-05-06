@@ -1,14 +1,13 @@
 package controllers;
 
-import invoice.Invoice;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import models.SearchInvoiceModel;
-import models.SearchresultInvoiceTableModel;
+import contacts.Customer;
+import models.SearchCustomerModel;
+import models.SearchresultCustomerTableModel;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,11 +22,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class SearchresultInvoiceController implements Initializable {
+public class SearchresultCustomerController implements Initializable {
 	
-	private ArrayList<Invoice> searchresultList;
+	private ArrayList<Customer> searchresultList;
 	
-	@FXML TableView<SearchInvoiceModel> searchresultTable;
+	@FXML TableView<SearchCustomerModel> searchresultTable;
 	@FXML TabPane tabPane;
 		
 	public void initialize(URL url, ResourceBundle resources) {
@@ -41,8 +40,8 @@ public class SearchresultInvoiceController implements Initializable {
 	}
 	
 	public void displaySearchresult() {
-		SearchresultInvoiceTableModel tableModel = new SearchresultInvoiceTableModel(searchresultList);
-		ObservableList<SearchInvoiceModel> items = (ObservableList<SearchInvoiceModel>) tableModel.getItems();
+		SearchresultCustomerTableModel tableModel = new SearchresultCustomerTableModel(searchresultList);
+		ObservableList<SearchCustomerModel> items = (ObservableList<SearchCustomerModel>) tableModel.getItems();
 		
 		searchresultTable.setItems(items);
 		searchresultTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -50,18 +49,18 @@ public class SearchresultInvoiceController implements Initializable {
 			public void handle(MouseEvent event) {
 			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
 			    	int index = searchresultTable.getSelectionModel().getSelectedIndex();
-			    	openInvoiceWindow(searchresultList.get(index));
+			    	openCustomerWindow(searchresultList.get(index));
 			    }
 			}
 		});
 	}
 	
-	private void openInvoiceWindow(Invoice searchResult) {		
+	private void openCustomerWindow(Customer searchResult) {		
 		if(searchResult == null){
 			return;
 		}		
 		try {			
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Invoice.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Customer.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
@@ -70,7 +69,7 @@ public class SearchresultInvoiceController implements Initializable {
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
-			InvoiceController<?> controller = fxmlLoader.<InvoiceController<?>>getController();
+			CustomerController controller = fxmlLoader.<CustomerController>getController();
 			controller.setSearchResult(searchResult);
 			controller.displaySearchresult();
 			secondStage.show();	
@@ -80,11 +79,11 @@ public class SearchresultInvoiceController implements Initializable {
 		}
 	}
 	
-	public ArrayList<Invoice> getSearchresultList() {
+	public ArrayList<Customer> getSearchresultList() {
 		return searchresultList;
 	}
 
-	public void setSearchResultList(ArrayList<Invoice> searchresultList) {
+	public void setSearchResultList(ArrayList<Customer> searchresultList) {
 		this.searchresultList = searchresultList;
 	}
 }

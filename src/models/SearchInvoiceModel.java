@@ -9,7 +9,7 @@ import javafx.beans.property.StringProperty;
 
 public class SearchInvoiceModel {
 
-	/* Porperties related to Rechnung */
+	/* Properties related to Rechnung */
 	private IntegerProperty id = new SimpleIntegerProperty();
 	private StringProperty name = new SimpleStringProperty();
 	private StringProperty creationDate = new SimpleStringProperty();

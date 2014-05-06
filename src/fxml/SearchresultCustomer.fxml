@@ -10,46 +10,46 @@
 <?import utils.TitledBorder?>
 
 <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
-	fx:controller="controllers.SearchresultInvoiceController">
+	fx:controller="controllers.SearchresultCustomerController">
 	<Tab text="Suchergebnisse">
 		<VBox styleClass="borderedBox">
 			<TitledBorder title="Suchergebnisse">
 				<VBox styleClass="textField">
 					<TableView fx:id="searchresultTable" prefHeight="400" >
 						<columns>
-							<TableColumn text="Nr." prefWidth="65">
+							<TableColumn text="Titel" prefWidth="60" minWidth="60">
 								<cellValueFactory>
-									<PropertyValueFactory property="id" />
+									<PropertyValueFactory property="title" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Erstellt" prefWidth="80" minWidth="80" >
-								<cellValueFactory>
-									<PropertyValueFactory property="creationDate" />
-								</cellValueFactory>
-							</TableColumn>
-							<TableColumn text="Kundenname" prefWidth="150" minWidth="150" >
+							<TableColumn text="Name" prefWidth="105" minWidth="105" >
 								<cellValueFactory>
 									<PropertyValueFactory property="name" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Ein-/Ausgehend" prefWidth="110" minWidth="110" >
+							<TableColumn text="Nachname" prefWidth="105" minWidth="105" >
 								<cellValueFactory>
-									<PropertyValueFactory property="outgoing" />
+									<PropertyValueFactory property="lastname" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Netto" prefWidth="65" minWidth="65" >
+							<TableColumn text="Geboren" prefWidth="80" minWidth="80" >
 								<cellValueFactory>
-									<PropertyValueFactory property="net" />
+									<PropertyValueFactory property="birthday" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Ust" prefWidth="65" minWidth="65" >
+							<TableColumn text="Adresse" prefWidth="120" minWidth="120" >
 								<cellValueFactory>
-									<PropertyValueFactory property="ust" />
+									<PropertyValueFactory property="address" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Total" prefWidth="65" minWidth="65" >
+							<TableColumn text="PLZ" prefWidth="50" minWidth="50" >
 								<cellValueFactory>
-									<PropertyValueFactory property="total" />
+									<PropertyValueFactory property="plz" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Ort" prefWidth="80" minWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="city" />
 								</cellValueFactory>
 							</TableColumn>
 						</columns>

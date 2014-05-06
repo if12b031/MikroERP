@@ -7,9 +7,9 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class ContactPresentationModel {
+public class CustomerPresentationModel {
 
-	/* Porperties related to Kunde */
+	/* Properties related to Kunde */
 	private StringProperty customerName = new SimpleStringProperty();
 	private StringProperty customerUID = new SimpleStringProperty();
 	private StringProperty customerTitle = new SimpleStringProperty();
@@ -53,7 +53,7 @@ public class ContactPresentationModel {
 		}
 	};
 
-	public ContactPresentationModel() {
+	public CustomerPresentationModel() {
 		ChangeListener<String> canEditListener = new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
@@ -87,7 +87,7 @@ public class ContactPresentationModel {
 		messageLabel.setValue("");
 	}
 	
-	/* Getters for StringProperties */
+	/* Getters for Properties */
 	public  StringProperty customerNameProperty() {
 		return customerName;
 	}
@@ -143,6 +143,7 @@ public class ContactPresentationModel {
 	public BooleanBinding disableEditCompanyBinding() {
 		return disableEditCompany;
 	}
+	
 	
 	/*	Getters and Setters	*/
 	public String getCustomerName() {
