@@ -16,6 +16,10 @@ public class SearchresultInvoiceTableModel {
 	}	
 	
 	public ObservableList<SearchInvoiceModel> getItems() {
+		if(invoiceList == null){
+			return null;
+		}
+		
 		ObservableList<SearchInvoiceModel> elements = FXCollections
 				.observableArrayList();
 		

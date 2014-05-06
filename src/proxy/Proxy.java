@@ -1,7 +1,6 @@
 package proxy;
 
 import invoice.Invoice;
-import invoice.InvoiceElement;
 import invoice.InvoiceList;
 
 import java.io.BufferedReader;
@@ -19,7 +18,7 @@ import contacts.CustomerList;
 public class Proxy {
 	
 	public ArrayList<Customer> searchCustomer(String name, String lastName, String company) {
-		/*try {
+		try {
 			String XMLResponse = "";
 			String buffer;
 			StringBuilder strBuilder = new StringBuilder();
@@ -53,9 +52,9 @@ public class Proxy {
 			System.out.println("Failed to create new socket!");
 		} catch (NullPointerException e){
 			System.out.println("No search results!");
-		}*/
+		}
 		
-		CustomerList c = new CustomerList();
+		/*CustomerList c = new CustomerList();
 		Customer m = new Customer();
 		m.set_title("Dr.");
 		m.set_surname("Georg");
@@ -71,12 +70,13 @@ public class Proxy {
 		c.add(m);
 		c.add(m);
 		c.add(m);
-		return c.getCustomers();
+		return c.getCustomers();*/
+		return null;
 	}
 	
-	public ArrayList<Invoice> searchInvoice(String dateFrom, String dateTo, String ValueFrom,
-											String ValueTo, String customer) {
-		/*try {
+	public ArrayList<Invoice> searchInvoice(String customer, String dateFrom, String dateTo, String valueFrom,
+											String valueTo) {
+		try {
 			String XMLResponse = "";
 			String buffer;
 			StringBuilder strBuilder = new StringBuilder();
@@ -86,8 +86,9 @@ public class Proxy {
 	        BufferedReader in = new BufferedReader(
                     new InputStreamReader(
                     		socket.getInputStream()));
-			
-	        out.println("GET /MikroERP_Facade/searchInvoices HTTP/1.1");
+
+	        out.println("GET /MikroERP_Facade/searchInvoices?name=" + customer + "&fromDate=" + dateFrom + "&toDate=" + dateTo
+	        		+ "&fromAmount=" + valueFrom + "&toAmount=" + valueTo + " HTTP/1.1");
 			out.flush();	        
 	
 	        while ((buffer = in.readLine()) != null){
@@ -110,9 +111,9 @@ public class Proxy {
 			System.out.println("Failed to create new socket!");
 		} catch (NullPointerException e){
 			System.out.println("No search results!");
-		}*/
+		}
 		
-		InvoiceList i = new InvoiceList();
+		/*InvoiceList i = new InvoiceList();
 		Invoice c = new Invoice();
 		InvoiceElement e = new InvoiceElement();
 		ArrayList<InvoiceElement> a = new ArrayList<InvoiceElement>();
@@ -142,7 +143,8 @@ public class Proxy {
 		i.add(c);
 		i.add(c);
 		i.add(c);
-		return i.getInvoices();
+		return i.getInvoices();*/
+		return null;
 	}
 	
 	public void createCustomer(Customer customer) {

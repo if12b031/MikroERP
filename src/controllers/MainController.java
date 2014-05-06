@@ -86,9 +86,9 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForInvoice() {
-		ArrayList<Invoice> searchResultList = (ArrayList<Invoice>) proxy.searchInvoice(searchInvoiceDateFrom.getText(),
-											searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), searchInvoiceValueTo.getText(),
-											searchInvoiceCustomer.getText());
+		ArrayList<Invoice> searchResultList = proxy.searchInvoice(searchInvoiceCustomer.getText(), 
+				searchInvoiceDateFrom.getText(), searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), 
+				searchInvoiceValueTo.getText());
 		if(searchResultList == null) {
 			messageLabelSuche.setText("No search results found!");
 			return;
@@ -149,8 +149,8 @@ public class MainController<T> implements Initializable{
 		}
 	}
 	
-	private void openCustomerWindow(ArrayList<Customer> searchResult) {		
-		if(searchResult.size() < 1){
+	private void openCustomerWindow(ArrayList<Customer> searchResultList) {		
+		if(searchResultList.size() < 1){
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}		
@@ -165,7 +165,7 @@ public class MainController<T> implements Initializable{
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
 			SearchresultCustomerController controller = fxmlLoader.<SearchresultCustomerController>getController();
-			controller.setSearchResultList(searchResult);
+			controller.setSearchResultList(searchResultList);
 			controller.displaySearchresult();
 			secondStage.show();			
 			

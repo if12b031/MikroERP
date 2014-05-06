@@ -13,7 +13,7 @@
 	fx:controller="controllers.SearchresultCustomerController">
 	<Tab text="Suchergebnisse">
 		<VBox styleClass="borderedBox">
-			<TitledBorder title="Suchergebnisse">
+			<TitledBorder title="Kunden">
 				<VBox styleClass="textField">
 					<TableView fx:id="searchresultTable" prefHeight="400" >
 						<columns>

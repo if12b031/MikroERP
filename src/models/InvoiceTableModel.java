@@ -16,6 +16,10 @@ public class InvoiceTableModel {
 	}	
 	
 	public ObservableList<InvoiceElementModel> getItems() {
+		if(a == null){
+			return null;
+		}
+		
 		ObservableList<InvoiceElementModel> elements = FXCollections
 				.observableArrayList();
 		

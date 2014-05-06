@@ -15,6 +15,10 @@ public class SearchresultCustomerTableModel {
 	}	
 	
 	public ObservableList<SearchCustomerModel> getItems() {
+		if(customerList == null){
+			return null;
+		}
+		
 		ObservableList<SearchCustomerModel> elements = FXCollections
 				.observableArrayList();
 		

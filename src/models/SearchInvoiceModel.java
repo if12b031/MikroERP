@@ -20,7 +20,11 @@ public class SearchInvoiceModel {
 	
 	public SearchInvoiceModel(int id, String name, String lastname, String creationDate, boolean outgoing, double ust, double net, double total){
 		this.id.set(id);
-		this.name.set(name + " " + lastname);
+		if(lastname != null) {
+			this.name.set(name + lastname);
+		} else{
+			this.name.set(name);
+		}
 		this.creationDate.set(creationDate);
 		if (outgoing == true){
 			this.outgoing.set("Ausgehend");
