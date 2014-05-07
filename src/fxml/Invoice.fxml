@@ -56,13 +56,6 @@
 						<Label styleClass="invoiceLabel" prefWidth="120">*Artikel:</Label>
 						<ComboBox fx:id="invoiceElement" promptText="Bezeichnung" prefWidth="100">
 							<items>
-						      	<FXCollections fx:factory="observableArrayList">
-						        	<String fx:value="Art1" />
-									<String fx:value="Art2" />
-									<String fx:value="Art3" />
-									<String fx:value="Art4" />
-									<String fx:value="Art5" />
-						    	</FXCollections>
 							</items>
 						</ComboBox>
 						<Label styleClass="invoiceLabel">Menge:</Label>

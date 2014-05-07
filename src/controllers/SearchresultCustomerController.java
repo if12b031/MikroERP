@@ -48,8 +48,10 @@ public class SearchresultCustomerController implements Initializable {
 			@Override
 			public void handle(MouseEvent event) {
 			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
-			    	int index = searchresultTable.getSelectionModel().getSelectedIndex();
-			    	openCustomerWindow(searchresultList.get(index));
+			    	int index = searchresultTable.getSelectionModel().getSelectedIndex();			    	
+			    	if(index >= 0){
+			    		openCustomerWindow(searchresultList.get(index));
+			    	}
 			    }
 			}
 		});

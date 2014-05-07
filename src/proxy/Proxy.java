@@ -1,6 +1,7 @@
 package proxy;
 
 import invoice.Invoice;
+import invoice.InvoiceElement;
 import invoice.InvoiceList;
 
 import java.io.BufferedReader;
@@ -128,8 +129,7 @@ public class Proxy {
 		a.add(e);
 		a.add(e);
 		c.set_invoiceNumber(12);
-		c.set_customerName("Georg");
-		c.set_customerLastname("Huszar");
+		c.set_customerName("Georg Huszar");
 		c.set_isOutgoing(true);
 		c.set_creationDate("2001-01-05");
 		c.set_net(100.00);
@@ -153,5 +153,22 @@ public class Proxy {
 	
 	public void createInvoice(Invoice invoice) {
 		
+	}
+	
+	public ArrayList<InvoiceElement> getArticles() {
+		InvoiceElement ie = new InvoiceElement();
+		InvoiceElement ie2 = new InvoiceElement();
+		InvoiceElement ie3 = new InvoiceElement();
+		ie.set_name("Hose");
+		ie.set_price(100);
+		ArrayList<InvoiceElement> al = new ArrayList<InvoiceElement>();
+		al.add(ie);
+		ie2.set_name("Shirt");
+		ie2.set_price(25);
+		al.add(ie2);
+		ie3.set_name("Krawatte");
+		ie3.set_price(19.90);
+		al.add(ie3);
+		return al;
 	}
 }

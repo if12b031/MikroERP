@@ -1,8 +1,9 @@
 package models;
 
-import javafx.beans.property.DoubleProperty;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,23 +12,28 @@ public class InvoiceElementModel {
 
 	/* Properties related to Rechnung */
 	private StringProperty name = new SimpleStringProperty();
-	private DoubleProperty price = new SimpleDoubleProperty();
+	private StringProperty price = new SimpleStringProperty();
 	private IntegerProperty amount = new SimpleIntegerProperty();
-	private DoubleProperty net = new SimpleDoubleProperty();
-	private DoubleProperty ust= new SimpleDoubleProperty();
-	private DoubleProperty total = new SimpleDoubleProperty();
+	private StringProperty net = new SimpleStringProperty();
+	private StringProperty ust= new SimpleStringProperty();
+	private StringProperty total = new SimpleStringProperty();
 	
 	public InvoiceElementModel(String name, double price, int amount){
+		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+		symbols.setDecimalSeparator('.');
+		DecimalFormat format = new DecimalFormat("#0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		
 		this.name.set(name);
-		this.price.set(price);
 		this.amount.set(amount);
-		this.net.set(price*amount);
-		this.ust.set(this.net.get() / 100 * 20); //20% ust
-		this.total.set(this.net.get() + this.ust.get());
+		this.price.set(format.format(price));
+		this.net.set(format.format(price*amount));
+		double ust = (price*amount) / 100 * 20; // 20% ust
+		this.ust.set(format.format(ust));
+		this.total.set(format.format(Double.parseDouble(this.net.get()) + Double.parseDouble(this.ust.get())));
 	}
 	
 	/* Getters for Properties */
-	public void setTotal(SimpleDoubleProperty total) {
+	public void setTotal(SimpleStringProperty total) {
 		this.total = total;
 	}
 	
@@ -39,19 +45,19 @@ public class InvoiceElementModel {
 		return amount;
 	}
 	
-	public final DoubleProperty priceProperty() {
+	public final StringProperty priceProperty() {
 		return price;
 	}
 
-	public final DoubleProperty netProperty() {
+	public final StringProperty netProperty() {
 		return net;
 	}
 	
-	public final DoubleProperty ustProperty() {
+	public final StringProperty ustProperty() {
 		return ust;
 	}
 
-	public final DoubleProperty totalProperty() {
+	public final StringProperty totalProperty() {
 		return total;
 	}
 	
@@ -65,11 +71,11 @@ public class InvoiceElementModel {
 		this.name.set(name);
 	}
 	
-	public double getPrice() {
+	public String getPrice() {
 		return price.get();
 	}
 	
-	public void setPrice(double price) {
+	public void setPrice(String price) {
 		this.price.set(price);
 	}
 	
@@ -81,27 +87,27 @@ public class InvoiceElementModel {
 		this.amount.set(amount);
 	}
 	
-	public double getNet() {
+	public String getNet() {
 		return net.get();
 	}
 	
-	public void setNet(double net) {
+	public void setNet(String net) {
 		this.net.set(net);
 	}
 	
-	public double getUst() {
+	public String getUst() {
 		return ust.get();
 	}
 	
-	public void setUst(double ust) {
+	public void setUst(String ust) {
 		this.ust.set(ust);
 	}
 	
-	public double getTotal() {
+	public String getTotal() {
 		return total.get();
 	}
 	
-	public void setTotal(double total) {
+	public void setTotal(String total) {
 		this.total.set(total);
 	}
 }

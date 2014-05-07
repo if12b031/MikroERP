@@ -1,5 +1,8 @@
 package models;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -14,11 +17,15 @@ public class SearchInvoiceModel {
 	private StringProperty name = new SimpleStringProperty();
 	private StringProperty creationDate = new SimpleStringProperty();
 	private StringProperty outgoing = new SimpleStringProperty();
-	private DoubleProperty net = new SimpleDoubleProperty();
-	private DoubleProperty ust= new SimpleDoubleProperty();
-	private DoubleProperty total = new SimpleDoubleProperty();
+	private StringProperty net = new SimpleStringProperty();
+	private StringProperty ust= new SimpleStringProperty();
+	private StringProperty total = new SimpleStringProperty();
 	
 	public SearchInvoiceModel(int id, String name, String creationDate, boolean outgoing, double ust, double net, double total){
+		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+		symbols.setDecimalSeparator('.');
+		DecimalFormat format = new DecimalFormat("#0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		
 		this.id.set(id);
 		this.name.set(name);
 		this.creationDate.set(creationDate);
@@ -26,10 +33,10 @@ public class SearchInvoiceModel {
 			this.outgoing.set("Ausgehend");
 		} else{
 			this.outgoing.set("Eingehend");
-		}
-		this.ust.set(ust);
-		this.net.set(net);
-		this.total.set(total);
+		} 
+		this.ust.set(format.format(ust));
+		this.net.set(format.format(net));
+		this.total.set(format.format(total));
 	}
 	
 	/* Getters for Properties */
@@ -49,15 +56,15 @@ public class SearchInvoiceModel {
 		return outgoing;
 	}
 
-	public final DoubleProperty netProperty() {
+	public final StringProperty netProperty() {
 		return net;
 	}
 	
-	public final DoubleProperty ustProperty() {
+	public final StringProperty ustProperty() {
 		return ust;
 	}
 
-	public final DoubleProperty totalProperty() {
+	public final StringProperty totalProperty() {
 		return total;
 	}
 	
@@ -87,27 +94,27 @@ public class SearchInvoiceModel {
 		this.creationDate.set(creationDate);
 	}
 		
-	public double getUst() {
+	public String getUst() {
 		return ust.get();
 	}
 	
-	public void setUst(double ust) {
+	public void setUst(String ust) {
 		this.ust.set(ust);
 	}
 	
-	public double getNet() {
+	public String getNet() {
 		return net.get();
 	}
 	
-	public void setNet(double net) {
+	public void setNet(String net) {
 		this.net.set(net);
 	}
 	
-	public double getTotal() {
+	public String getTotal() {
 		return total.get();
 	}
 	
-	public void setTotal(double total) {
+	public void setTotal(String total) {
 		this.total.set(total);
 	}
 }

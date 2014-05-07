@@ -50,7 +50,9 @@ public class SearchresultInvoiceController implements Initializable {
 			public void handle(MouseEvent event) {
 			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
 			    	int index = searchresultTable.getSelectionModel().getSelectedIndex();
-			    	openInvoiceWindow(searchresultList.get(index));
+			    	if(index >= 0){
+			    		openInvoiceWindow(searchresultList.get(index));
+			    	}
 			    }
 			}
 		});

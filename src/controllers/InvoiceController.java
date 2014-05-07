@@ -13,6 +13,7 @@ import invoice.Invoice;
 import invoice.InvoiceElement;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -28,12 +31,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 public class InvoiceController<T> implements Initializable {
 	
 	private InvoicePresentationModel presentationModel;
 	private Proxy proxy;
-	private ArrayList<InvoiceElement> tmpInvoiceElements = new ArrayList<InvoiceElement>();
+	private ArrayList<InvoiceElement> addedInvoiceElements = new ArrayList<InvoiceElement>();
+	private ArrayList<InvoiceElement> allInvoiceElements = new ArrayList<InvoiceElement>();
 	private Invoice searchResult;
 		
 	@FXML TabPane tabPane;
@@ -46,13 +52,13 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private TextField invoiceAddress;
 	@FXML private TextField invoiceComment;
 	@FXML private TextArea invoiceMessage;
-	@FXML private ComboBox<T> invoiceElement;
+	@FXML private ComboBox<InvoiceElement> invoiceElement;
+	@FXML private ComboBox<T> invoiceDirection;
 	@FXML private TextField invoiceElementAmount;
 	@FXML private Button createInvoice;
 	@FXML private Button clearInvoice;
 	@FXML private Button cancelInvoice;
 	@FXML private Button addElement;
-	@FXML private ComboBox<T> invoiceDirection;
 	@FXML private Label messageLabelRechnung;
 	@FXML private TableView<InvoiceElementModel> elementTable;
 	
@@ -66,7 +72,8 @@ public class InvoiceController<T> implements Initializable {
 		});
 		elementTable.setPlaceholder(new Text(""));
 		elementTable.setEditable(false);
-		applyBindings();		
+		applyBindings();
+		setArticles();
 	}
 
 	private void applyBindings() {
@@ -81,6 +88,49 @@ public class InvoiceController<T> implements Initializable {
 		messageLabelRechnung.textProperty().bindBidirectional(presentationModel.messageLabelProperty());
 	}
 	
+	private void setArticles() {
+		this.allInvoiceElements = proxy.getArticles();
+		if(allInvoiceElements != null) {
+			ObservableList<InvoiceElement> comboBoxElements = FXCollections.observableArrayList();
+			for(int i=0; i<allInvoiceElements.size(); i++){
+				comboBoxElements.add(allInvoiceElements.get(i));
+			}
+			invoiceElement.setItems(comboBoxElements);
+			invoiceElement.setCellFactory(new Callback<ListView<InvoiceElement>, ListCell<InvoiceElement>>(){
+		            @Override 
+		            public ListCell<InvoiceElement> call(ListView<InvoiceElement> p){
+		            	return new ListCell<InvoiceElement>(){             
+		                    @Override 
+		                    protected void updateItem(InvoiceElement item, boolean empty){
+		                        super.updateItem(item, empty);
+		                        
+		                        if(item == null || empty){
+		                            setGraphic(null);
+		                        } else{
+		                        	setText(item.get_name());
+		                        }
+		                   }
+		              };
+		          }
+			});
+			invoiceElement.setConverter(new StringConverter<InvoiceElement>(){
+	              @Override
+	              public String toString(InvoiceElement element){
+	            	  if (element == null){
+	            		  return null;
+	            	  } else{
+	            		  return element.get_name();
+	            	  }
+	              }
+	              @Override
+	              public InvoiceElement fromString(String name) {
+	            	  return null;
+	              }
+	        });
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void displaySearchresult() {
 		presentationModel.setInvoiceID(Integer.toString(searchResult.get_invoiceNumber()));
 		presentationModel.setInvoiceDate(searchResult.get_creationDate());
@@ -91,14 +141,14 @@ public class InvoiceController<T> implements Initializable {
 		presentationModel.setInvoiceMessage(searchResult.get_message());
 		
 		if(searchResult.get_articles() != null){
-			this.tmpInvoiceElements = searchResult.get_articles();
+			this.addedInvoiceElements = searchResult.get_articles();
 		}
 		displayInvoiceElements();
 		
 		if(searchResult.is_isOutgoing()){
-			invoiceDirection.setValue((T) "Ausgehend");
+			invoiceDirection.setValue((T) "Ausgehend"); // suppressWarning because of this cast
 		} else{
-			invoiceDirection.setValue((T) "Eingehend");
+			invoiceDirection.setValue((T) "Eingehend"); // suppressWarning because of this cast
 		}
 	}
 	
@@ -119,11 +169,11 @@ public class InvoiceController<T> implements Initializable {
 				invoice.set_message(invoiceMessage.getText());
 				invoice.set_shippingAddress(invoiceShippingAddress.getText());
 				invoice.set_invoiceAddress(invoiceAddress.getText());
-				invoice.set_articles(tmpInvoiceElements);
+				invoice.set_articles(addedInvoiceElements);
 				
 				proxy.createInvoice(invoice);
 				
-				tmpInvoiceElements.clear();
+				addedInvoiceElements.clear();
 				clearNewInvoice();
 				
 				messageLabelRechnung.setText("New Invoice created!");
@@ -144,6 +194,9 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private void clearNewInvoice() {
 		presentationModel.clearInvoice();
 		elementTable.setItems(null);
+		invoiceElement.getSelectionModel().clearSelection();
+		invoiceDirection.getSelectionModel().clearSelection();
+		addedInvoiceElements.clear();
 	}
 	
 	@FXML private void cancelNewInvoice() {
@@ -156,14 +209,16 @@ public class InvoiceController<T> implements Initializable {
 		if(checkInvoiceELementInput()){
 			try {
 				InvoiceElement invElem = new InvoiceElement();
+				int index = invoiceElement.getSelectionModel().getSelectedIndex();
 				
-				invElem.set_name(invoiceElement.getValue().toString());
+				invElem.set_name(allInvoiceElements.get(index).get_name());
 				invElem.set_amount(Integer.parseInt(invoiceElementAmount.getText()));
-				invElem.set_price(100);
-				tmpInvoiceElements.add(invElem);
+				invElem.set_price((allInvoiceElements.get(index).get_price()));
+				addedInvoiceElements.add(invElem);
 				clearAddElement();
 				displayInvoiceElements();
 			} catch(NumberFormatException e){
+				e.printStackTrace();
 				messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
 				System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
 			}
@@ -198,7 +253,7 @@ public class InvoiceController<T> implements Initializable {
 				return true;
 			}
 		} catch(NumberFormatException e){
-			messageLabelRechnung.setText("Field \"Artikelbezeichnung\" in TabPane \"Rechnung\" is not an Integer!");
+			messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
 			System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
 		} catch(NullPointerException e){
 			messageLabelRechnung.setText("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
@@ -212,7 +267,7 @@ public class InvoiceController<T> implements Initializable {
 	}
 	
 	private void displayInvoiceElements() {
-        InvoiceTableModel tableModel = new InvoiceTableModel(tmpInvoiceElements);
+        InvoiceTableModel tableModel = new InvoiceTableModel(addedInvoiceElements);
 		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
 		
 		elementTable.setItems(items);
@@ -221,8 +276,10 @@ public class InvoiceController<T> implements Initializable {
 			public void handle(MouseEvent event) {
 			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
 			    	int index = elementTable.getSelectionModel().getSelectedIndex();
-			    	tmpInvoiceElements.remove(index);
-			    	displayInvoiceElements();
+			    	if(index >= 0){
+			    		addedInvoiceElements.remove(index);
+			    		displayInvoiceElements();
+			    	}
 			    }
 			}
 		});
