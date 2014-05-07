@@ -16,13 +16,25 @@ public class SearchCustomerModel {
 	private StringProperty plz = new SimpleStringProperty();
 	private StringProperty city = new SimpleStringProperty();
 	
-	public SearchCustomerModel(String uid, String title, String name, String lastname, 
-			String suffix, String birthday,String address, String plz, String city){
+	public SearchCustomerModel(String uid,String companyName, String title, String name, String lastname, 
+			String suffix, String birthday, String address, String plz, String city){
+		if(uid == null){
+			uid = "";
+		}
+		if(companyName == null){
+			companyName = "";
+		}
+		if(name == null){
+			name = "";
+		}
+		if(lastname == null){
+			lastname = "";
+		}
 		this.uid.set(uid);
 		this.title.set(title);
 		this.suffix.set(suffix);
-		this.name.set(name);
-		this.lastname.set(lastname);
+		this.name.set(name + companyName);
+		this.lastname.set(lastname + uid);
 		this.birthday.set(birthday);
 		this.address.set(address);
 		this.plz.set(plz);

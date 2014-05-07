@@ -22,12 +22,12 @@
 									<PropertyValueFactory property="title" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Name" prefWidth="105" minWidth="105" >
+							<TableColumn text="Name/Firma" prefWidth="105" minWidth="105" >
 								<cellValueFactory>
 									<PropertyValueFactory property="name" />
 								</cellValueFactory>
 							</TableColumn>
-							<TableColumn text="Nachname" prefWidth="105" minWidth="105" >
+							<TableColumn text="Nachname/UID" prefWidth="105" minWidth="105" >
 								<cellValueFactory>
 									<PropertyValueFactory property="lastname" />
 								</cellValueFactory>

@@ -164,6 +164,7 @@ public class InvoiceController<T> implements Initializable {
 				
 				invoice.set_invoiceNumber(Integer.parseInt(invoiceID.getText()));
 				invoice.set_isOutgoing(isOutgoing);
+				invoice.set_customerName(invoiceCustomer.getText());
 				invoice.set_creationDate(invoiceDate.getText());
 				invoice.set_comment(invoiceComment.getText());
 				invoice.set_message(invoiceMessage.getText());
@@ -171,10 +172,14 @@ public class InvoiceController<T> implements Initializable {
 				invoice.set_invoiceAddress(invoiceAddress.getText());
 				invoice.set_articles(addedInvoiceElements);
 				
-				proxy.createInvoice(invoice);
-				
-				addedInvoiceElements.clear();
-				clearNewInvoice();
+				if(proxy.createInvoice(invoice) == 0){
+					clearNewInvoice();					
+					messageLabelRechnung.setText("New Invoice created!");
+					System.out.println("New Invoice created!");
+				} else {
+					messageLabelRechnung.setText("Error while creating new Invoice!");
+					System.out.println("Error while creating new Invoice!");
+				}
 				
 				messageLabelRechnung.setText("New Invoice created!");
 				System.out.println("New Invoice created!");

@@ -110,12 +110,14 @@ public class CustomerController implements Initializable{
 				customer.set_plz(Integer.parseInt(customerPLZ.getText()));
 				customer.set_city(customerCity.getText());
 				
-				proxy.createCustomer(customer);
-				
-				clearNewCustomer();
-				
-				messageLabelKunde.setText("New Customer created!");
-				System.out.println("New Customer created!");
+				if(proxy.createCustomer(customer) == 0){
+					clearNewCustomer();					
+					messageLabelKunde.setText("New Customer created!");
+					System.out.println("New Customer created!");
+				} else {
+					messageLabelKunde.setText("Error while creating new Customer!");
+					System.out.println("Error while creating new Customer!");
+				}
 			} catch(NumberFormatException e){
 				messageLabelKunde.setText("Field \"PLZ\" in TabPane \"Kunde\" is not an Integer!");
 				System.out.println("Field \"PLZ\" in TabPane \"Kunde\" is not an Integer!");
