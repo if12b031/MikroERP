@@ -53,7 +53,7 @@ public class CustomerController implements Initializable{
 		        clearMessages();
 		    }
 		});
-		applyBindings();	
+		applyBindings();
 	}
 
 	private void applyBindings() {
@@ -92,12 +92,18 @@ public class CustomerController implements Initializable{
 			presentationModel.setCustomerPLZ(Integer.toString(searchResult.get_plz()));
 		}
 		presentationModel.setCustomerCity(searchResult.get_city());
+		
+		if(searchResult.get_id() > 0){
+			createCustomer.setText("Update");
+			clearCustomer.setDisable(true);
+		}
 	}
 	
 	@FXML private void createNewCustomer() {
 		if(checkCustomerInput()){
 			try {
 				Customer customer = new Customer();
+				customer.set_id(searchResult.get_id());
 				customer.set_name(customerName.getText());
 				customer.set_uid(customerUID.getText());
 				customer.set_title(customerTitle.getText());
@@ -111,7 +117,7 @@ public class CustomerController implements Initializable{
 				customer.set_city(customerCity.getText());
 				
 				if(proxy.createCustomer(customer) == 0){
-					clearNewCustomer();					
+					clearNewCustomer();	
 					messageLabelKunde.setText("New Customer created!");
 					System.out.println("New Customer created!");
 				} else {

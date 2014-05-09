@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `price` int(11) NOT NULL,
+  `price` decimal(11,2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +38,7 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES (1,'Hose',100),(2,'T-Shirt',27),(3,'Weiße Jacke',121),(4,'Pullover Rot',70),(5,'Schuhe',56);
+INSERT INTO `articles` VALUES (1,'Hose',99.99),(2,'T-Shirt',27.19),(3,'Weiße Jacke',121.00),(4,'Pullover Rot',70.00),(5,'Schuhe',56.99);
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,9 +94,9 @@ CREATE TABLE `invoices` (
   `customerName` varchar(45) NOT NULL,
   `shippingAddress` varchar(45) NOT NULL,
   `invoiceAddress` varchar(45) NOT NULL,
-  `ust` int(11) NOT NULL,
-  `gross` int(11) NOT NULL,
-  `net` int(11) NOT NULL,
+  `ust` decimal(11,2) NOT NULL,
+  `gross` decimal(11,2) NOT NULL,
+  `net` decimal(11,2) NOT NULL,
   `fkCustomerId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fkCustomerId` (`fkCustomerId`),
@@ -104,15 +104,6 @@ CREATE TABLE `invoices` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `invoices`
---
-
-LOCK TABLES `invoices` WRITE;
-/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-INSERT INTO `invoices` VALUES (1,10,'\0','2014-05-07','2021-05-07',NULL,'Das ist eine sehr lange Nachricht. Ich hoffe sie wird korrekt gespeichert','Georg Huszar','Gewerbestraße 22, 5066 St. Pölten','Gewerbestraße 22, 5066 St. Pölten',535,3211,2676,1),(2,11,'','2014-05-07','2021-05-07',NULL,'Das ist eine sehr lange Nachricht. Ich hoffe sie wird korrekt gespeichert','Stefan Ziffer','Haushochgasse 1, 1220 Wien','Gewerbestraße 22, 5066 St. Pölten',535,3211,2676,2),(3,12,'','2014-05-07','2021-05-07',NULL,'Das ist eine sehr lange Nachricht. Ich hoffe sie wird korrekt gespeichert','Meister Bau AG.','Meisterstraße 2, 3355 Badenberg','Meisterstraße 2, 3355 Badenberg',535,3211,2676,3),(4,13,'','2014-05-07','2021-05-07',NULL,'Das ist eine sehr lange Nachricht. Ich hoffe sie wird korrekt gespeichert','Erste Bank','Stephansplatz 42, 1010 Wien','Stephansplatz 42, 1010 Wien',535,3211,2676,4),(5,14,'','2014-05-07','2021-05-07',NULL,'Das ist eine sehr lange Nachricht. Ich hoffe sie wird korrekt gespeichert','Philipp Müllner','Am Lande 10, 6666 Wolkersdorf','Gewerbestraße 22, 5066 St. Pölten',535,3211,2676,5);
-/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `invoices2articles`
@@ -137,13 +128,6 @@ CREATE TABLE `invoices2articles` (
 --
 -- Dumping data for table `invoices2articles`
 --
-
-LOCK TABLES `invoices2articles` WRITE;
-/*!40000 ALTER TABLE `invoices2articles` DISABLE KEYS */;
-INSERT INTO `invoices2articles` VALUES (1,1,1,1),(2,2,1,1),(3,3,1,1),(4,4,1,1),(5,1,2,1),(6,2,2,1),(7,3,2,1),(8,4,2,1),(9,1,3,1),(10,2,3,1),(11,3,3,1),(12,4,3,1),(13,1,4,1),(14,2,4,1),(15,3,4,1),(16,4,4,1),(17,1,5,1),(18,2,5,1),(19,3,5,1),(20,4,5,1);
-/*!40000 ALTER TABLE `invoices2articles` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

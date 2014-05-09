@@ -16,7 +16,7 @@ public class SearchCustomerModel {
 	private StringProperty plz = new SimpleStringProperty();
 	private StringProperty city = new SimpleStringProperty();
 	
-	public SearchCustomerModel(String uid,String companyName, String title, String name, String lastname, 
+	public SearchCustomerModel(String uid, String companyName, String title, String name, String lastname, 
 			String suffix, String birthday, String address, String plz, String city){
 		if(uid == null){
 			uid = "";

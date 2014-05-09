@@ -96,6 +96,11 @@
 							</TableColumn>
 						</columns>
 					</TableView>
+					<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+						<Label fx:id="invoiceNet" styleClass="invoiceLabel" minWidth="80"></Label>
+						<Label fx:id="invoiceUst" styleClass="invoiceLabel" minWidth="60"></Label>
+						<Label fx:id="invoiceTotal" styleClass="invoiceLabel" minWidth="80"></Label>
+					</HBox>
 				</VBox>
 			</TitledBorder>
 			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">

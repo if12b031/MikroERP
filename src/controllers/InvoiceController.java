@@ -1,6 +1,8 @@
 package controllers;
 
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -59,6 +61,9 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private Button clearInvoice;
 	@FXML private Button cancelInvoice;
 	@FXML private Button addElement;
+	@FXML private Label invoiceNet;
+	@FXML private Label invoiceUst;
+	@FXML private Label invoiceTotal;
 	@FXML private Label messageLabelRechnung;
 	@FXML private TableView<InvoiceElementModel> elementTable;
 	
@@ -85,6 +90,9 @@ public class InvoiceController<T> implements Initializable {
 		invoiceComment.textProperty().bindBidirectional(presentationModel.invoiceCommentProperty());
 		invoiceMessage.textProperty().bindBidirectional(presentationModel.invoiceMessageProperty());
 		invoiceElementAmount.textProperty().bindBidirectional(presentationModel.invoiceElementAmountProperty());
+		invoiceNet.textProperty().bindBidirectional(presentationModel.invoiceNetProperty());
+		invoiceUst.textProperty().bindBidirectional(presentationModel.invoiceUstProperty());
+		invoiceTotal.textProperty().bindBidirectional(presentationModel.invoiceTotalProperty());
 		messageLabelRechnung.textProperty().bindBidirectional(presentationModel.messageLabelProperty());
 	}
 	
@@ -140,15 +148,28 @@ public class InvoiceController<T> implements Initializable {
 		presentationModel.setInvoiceComment(searchResult.get_comment());
 		presentationModel.setInvoiceMessage(searchResult.get_message());
 		
+		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+		symbols.setDecimalSeparator(',');
+		symbols.setGroupingSeparator('.');
+		DecimalFormat format = new DecimalFormat("###,##0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		presentationModel.setInvoiceNet("Netto: " + format.format(searchResult.get_net()));
+		presentationModel.setInvoiceUst("Ust: " + format.format(searchResult.get_ust()));
+		presentationModel.setInvoiceTotal("Total: " + format.format(searchResult.get_gross()));
+		
 		if(searchResult.get_articles() != null){
 			this.addedInvoiceElements = searchResult.get_articles();
 		}
 		displayInvoiceElements();
 		
 		if(searchResult.is_isOutgoing()){
-			invoiceDirection.setValue((T) "Ausgehend"); // suppressWarning because of this cast
+			invoiceDirection.setValue((T) "Ausgehend"); // suppressWarnings because of this cast
 		} else{
-			invoiceDirection.setValue((T) "Eingehend"); // suppressWarning because of this cast
+			invoiceDirection.setValue((T) "Eingehend"); // suppressWarnings because of this cast
+		}
+		
+		if(searchResult.get_id() > 0){
+			createInvoice.setText("Update");
+			clearInvoice.setDisable(true);
 		}
 	}
 	
@@ -161,7 +182,7 @@ public class InvoiceController<T> implements Initializable {
 				if(((String)invoiceDirection.getValue()).equals("Ausgehend")){
 					isOutgoing = true;
 				}
-				
+				invoice.set_id(searchResult.get_id());
 				invoice.set_invoiceNumber(Integer.parseInt(invoiceID.getText()));
 				invoice.set_isOutgoing(isOutgoing);
 				invoice.set_customerName(invoiceCustomer.getText());
@@ -171,6 +192,18 @@ public class InvoiceController<T> implements Initializable {
 				invoice.set_shippingAddress(invoiceShippingAddress.getText());
 				invoice.set_invoiceAddress(invoiceAddress.getText());
 				invoice.set_articles(addedInvoiceElements);
+				
+				String invUst = invoiceUst.getText().replaceAll("Ust: ", "");
+				String invNet = invoiceNet.getText().replaceAll("Netto: ", "");
+				String invTotal = invoiceTotal.getText().replaceAll("Total: ", "");
+				
+				double ust = Double.parseDouble(invUst.replaceAll(",", "."));
+				double net = Double.parseDouble(invNet.replaceAll(",", "."));
+				double total = Double.parseDouble(invTotal.replaceAll(",", "."));
+				
+				invoice.set_net(net);
+				invoice.set_ust(ust);
+				invoice.set_gross(total);
 				
 				if(proxy.createInvoice(invoice) == 0){
 					clearNewInvoice();					
@@ -184,6 +217,7 @@ public class InvoiceController<T> implements Initializable {
 				messageLabelRechnung.setText("New Invoice created!");
 				System.out.println("New Invoice created!");
 			} catch(NumberFormatException e){
+				e.printStackTrace();
 				messageLabelRechnung.setText("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
 				System.out.println("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
 			} catch(NullPointerException e){
@@ -222,6 +256,7 @@ public class InvoiceController<T> implements Initializable {
 				addedInvoiceElements.add(invElem);
 				clearAddElement();
 				displayInvoiceElements();
+				calculateInvoiceValues();
 			} catch(NumberFormatException e){
 				e.printStackTrace();
 				messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
@@ -284,10 +319,33 @@ public class InvoiceController<T> implements Initializable {
 			    	if(index >= 0){
 			    		addedInvoiceElements.remove(index);
 			    		displayInvoiceElements();
+			    		calculateInvoiceValues();
 			    	}
 			    }
 			}
 		});
+	}
+	
+	private void calculateInvoiceValues() {
+		double net = 0;
+		double ust = 0;
+		double total = 0;
+		
+		for(int i=0; i<addedInvoiceElements.size(); i++){
+			double price = addedInvoiceElements.get(i).get_price();
+			int amount = addedInvoiceElements.get(i).get_amount();
+			net += (price * amount) / 120 * 100;
+			ust += (price * amount) / 120 * 20;
+			total += price * amount;
+		}
+		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+		symbols.setDecimalSeparator(',');
+		symbols.setGroupingSeparator('.');
+		DecimalFormat format = new DecimalFormat("###,##0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		
+		invoiceNet.setText("Netto: " + format.format(net));
+		invoiceUst.setText("Ust: " + format.format(ust));
+		invoiceTotal.setText("Total: " + format.format(total));
 	}
 	
 	private void clearAddElement() {

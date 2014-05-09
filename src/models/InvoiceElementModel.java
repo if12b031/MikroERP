@@ -20,16 +20,17 @@ public class InvoiceElementModel {
 	
 	public InvoiceElementModel(String name, double price, int amount){
 		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
-		symbols.setDecimalSeparator('.');
-		DecimalFormat format = new DecimalFormat("#0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		symbols.setDecimalSeparator(',');
+		symbols.setGroupingSeparator('.');
+		DecimalFormat format = new DecimalFormat("###,##0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
 		
 		this.name.set(name);
 		this.amount.set(amount);
 		this.price.set(format.format(price));
-		this.net.set(format.format(price*amount));
-		double ust = (price*amount) / 100 * 20; // 20% ust
+		double ust = (price * amount) / 120 * 20; // 20% ust
 		this.ust.set(format.format(ust));
-		this.total.set(format.format(Double.parseDouble(this.net.get()) + Double.parseDouble(this.ust.get())));
+		this.net.set(format.format((ust / 20) * 100));
+		this.total.set(format.format(price * amount));
 	}
 	
 	/* Getters for Properties */

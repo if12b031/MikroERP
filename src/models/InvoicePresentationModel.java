@@ -1,11 +1,12 @@
 package models;
 
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
 public class InvoicePresentationModel {
-
+	
 	/* Properties related to Rechnung */
 	private StringProperty invoiceID = new SimpleStringProperty();
 	private StringProperty invoiceDate = new SimpleStringProperty();
@@ -15,6 +16,9 @@ public class InvoicePresentationModel {
 	private StringProperty invoiceComment = new SimpleStringProperty();
 	private StringProperty invoiceMessage = new SimpleStringProperty();
 	private StringProperty invoiceElementAmount = new SimpleStringProperty();
+	private StringProperty invoiceNet = new SimpleStringProperty();
+	private StringProperty invoiceUst = new SimpleStringProperty();
+	private StringProperty invoiceTotal = new SimpleStringProperty();
 	private StringProperty messageLabel = new SimpleStringProperty();
 	
 	public void clearInvoice() {
@@ -26,6 +30,9 @@ public class InvoicePresentationModel {
 		invoiceComment.setValue("");
 		invoiceMessage.setValue("");
 		invoiceElementAmount.setValue("");
+		invoiceNet.setValue("");
+		invoiceUst.setValue("");
+		invoiceTotal.setValue("");
 		messageLabel.setValue("");
 	}
 	
@@ -62,6 +69,18 @@ public class InvoicePresentationModel {
 		return invoiceElementAmount;
 	}
 	
+	public StringProperty invoiceNetProperty() {
+		return invoiceNet;
+	}
+	
+	public StringProperty invoiceUstProperty() {
+		return invoiceUst;
+	}
+	
+	public StringProperty invoiceTotalProperty() {
+		return invoiceTotal;
+	}
+	
 	public StringProperty messageLabelProperty() {
 		return messageLabel;
 	}
@@ -83,6 +102,7 @@ public class InvoicePresentationModel {
 	public void setInvoiceDate(String invoiceDate) {
 		this.invoiceDate.set(invoiceDate);
 	}
+	
 	public String getInvoiceCustomer() {
 		return invoiceCustomer.get();
 	}
@@ -129,6 +149,30 @@ public class InvoicePresentationModel {
 
 	public void setInvoiceElementAmount(String invoiceElementAmount) {
 		this.invoiceElementAmount.set(invoiceElementAmount);
+	}
+
+	public void setInvoiceNet(String invoiceNet) {
+		this.invoiceNet.set(invoiceNet);
+	}
+	
+	public String getInvoiceNet() {
+		return invoiceNet.get();
+	}
+
+	public void setInvoiceUst(String invoiceUst) {
+		this.invoiceUst.set(invoiceUst);
+	}
+	
+	public String getInvoiceUst() {
+		return invoiceUst.get();
+	}
+	
+	public void setInvoiceTotal(String invoiceTotal) {
+		this.invoiceTotal.set(invoiceTotal);
+	}
+	
+	public String getInvoiceTotal() {
+		return invoiceTotal.get();
 	}
 	
 	public String getMessageLabel() {

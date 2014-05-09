@@ -66,7 +66,7 @@ public class SearchresultCustomerController implements Initializable {
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 700);
+			Scene scene = new Scene(root, 550, 730);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
@@ -74,7 +74,7 @@ public class SearchresultCustomerController implements Initializable {
 			CustomerController controller = fxmlLoader.<CustomerController>getController();
 			controller.setSearchResult(searchResult);
 			controller.displaySearchresult();
-			secondStage.show();	
+			secondStage.show();
 			
 		} catch (IOException e){
 			e.printStackTrace();

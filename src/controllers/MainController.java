@@ -75,14 +75,15 @@ public class MainController<T> implements Initializable{
 		if(searchResultList == null) {
 			messageLabelSuche.setText("No search results found!");
 			return;
-		}
-		
+		}		
 		openCustomerWindow(searchResultList);
+		clearMessages();
 	}
 	
 	@FXML private void newCustomer() {
 		Customer customer = new Customer();
 		openEmptyCustomerWindow(customer);
+		clearMessages();
 	}
 	
 	@FXML private void searchForInvoice() {
@@ -94,11 +95,13 @@ public class MainController<T> implements Initializable{
 			return;
 		}
 		openInvoiceWindow(searchResultList);
+		clearMessages();
 	}
 	
 	@FXML private void newInvoice() {
 		Invoice invoice = new Invoice();		
 		openEmptyInvoiceWindow(invoice);
+		clearMessages();
 	}
 	
 	private void openInvoiceWindow(ArrayList<Invoice> searchResultList) {		
@@ -128,14 +131,14 @@ public class MainController<T> implements Initializable{
 	
 	private void openEmptyInvoiceWindow(Invoice searchResult) {		
 		if(searchResult == null){
-			return;
+			searchResult = new Invoice();
 		}		
 		try {			
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Invoice.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 700);
+			Scene scene = new Scene(root, 550, 730);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
@@ -176,15 +179,14 @@ public class MainController<T> implements Initializable{
 	
 	private void openEmptyCustomerWindow(Customer searchResult) {		
 		if(searchResult == null){
-			messageLabelSuche.setText("No search results found!");
-			return;
+			searchResult = new Customer();
 		}		
 		try {			
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Customer.fxml"));
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 700);
+			Scene scene = new Scene(root, 550, 730);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");

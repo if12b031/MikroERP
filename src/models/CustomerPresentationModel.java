@@ -166,14 +166,14 @@ public class CustomerPresentationModel {
 	}
 
 	public void setCustomerTitle(String customerTitle) {
-		this.customerSurname.set(customerTitle);
+		this.customerTitle.set(customerTitle);
 	}
 	public String getCustomerSuffix() {
 		return customerSuffix.get();
 	}
 
 	public void setCustomerSuffix(String customerSuffix) {
-		this.customerSurname.set(customerSuffix);
+		this.customerSuffix.set(customerSuffix);
 	}
 
 	public String getCustomerSurname() {
