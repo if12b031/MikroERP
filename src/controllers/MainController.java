@@ -16,13 +16,19 @@ import contacts.Customer;
 import contacts.CustomerSearchQuery;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,6 +55,8 @@ public class MainController<T> implements Initializable{
 	@FXML private TextField searchCustomerLastName;
 	@FXML private TextField searchCustomerCompany;
 	@FXML private Label messageLabelSuche;
+	@FXML private Button searchInvoice;
+	@FXML private Button searchCustomer;
 	
 	public void initialize(URL url, ResourceBundle resources) {
 		this.presentationModel = new MainPresentationModel();
@@ -58,7 +66,8 @@ public class MainController<T> implements Initializable{
 		        clearMessages();
 		    }
 		});
-		applyBindings();		
+		applyBindings();
+		applyEventHandlers();
 	}
 
 	private void applyBindings() {
@@ -72,6 +81,82 @@ public class MainController<T> implements Initializable{
 				presentationModel.disableEditPersonBinding());
 		searchCustomerLastName.disableProperty().bind(
 				presentationModel.disableEditPersonBinding());
+	}
+	
+	private void applyEventHandlers() {
+		/* Events for Textfields related to Invoice search */
+		searchInvoiceDateFrom.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForInvoice();
+		        }
+		    }
+		});
+		
+		searchInvoiceDateTo.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForInvoice();
+		        }
+		    }
+		});
+		
+		searchInvoiceValueFrom.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForInvoice();
+		        }
+		    }
+		});
+		
+		searchInvoiceValueTo.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForInvoice();
+		        }
+		    }
+		});
+		
+		searchInvoiceCustomer.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForInvoice();
+		        }
+		    }
+		});
+		
+		/* Events for Textfields related to Customer search */
+		searchCustomerName.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForCustomer();
+		        }
+		    }
+		});
+		
+		searchCustomerLastName.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForCustomer();
+		        }
+		    }
+		});
+		
+		searchCustomerCompany.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
+		    public void handle(KeyEvent t) {
+		        if (combo.match(t)) {
+		            searchForCustomer();
+		        }
+		    }
+		});
 	}
 	
 	@FXML private void searchForCustomer() {	
