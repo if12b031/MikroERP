@@ -2,13 +2,18 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import models.MainPresentationModel;
 import proxy.Proxy;
+import utils.Utils;
 import invoice.Invoice;
 import contacts.Customer;
+import contacts.CustomerSearchQuery;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -70,13 +75,17 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForCustomer() {	
-		ArrayList<Customer> searchResultList = proxy.searchCustomer(searchCustomerName.getText(),
-											searchCustomerLastName.getText(), searchCustomerCompany.getText());
+		CustomerSearchQuery search = new CustomerSearchQuery();
+		search.set_name(searchCustomerCompany.getText());
+		search.set_surname(searchCustomerName.getText());
+		search.set_lastname(searchCustomerLastName.getText());
+		ArrayList<Customer> searchResultList = proxy.searchCustomer(search.get_surname(), search.get_lastname(),
+				search.get_name());
 		if(searchResultList == null) {
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}		
-		openCustomerWindow(searchResultList);
+		openCustomerWindow(searchResultList, search);
 		clearMessages();
 	}
 	
@@ -87,6 +96,23 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForInvoice() {
+		try{
+			@SuppressWarnings("unused")
+			Date convertedDate = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			sdf.setLenient(false);
+			if(!Utils.isNullOrEmpty(searchInvoiceDateFrom.getText())){
+				convertedDate = sdf.parse(searchInvoiceDateFrom.getText());
+			}
+			if(!Utils.isNullOrEmpty(searchInvoiceDateTo.getText())){
+				convertedDate = sdf.parse(searchInvoiceDateTo.getText());
+			}
+		} catch (ParseException e) {
+			messageLabelSuche.setText("Field \"Datum von\" or \"Datum bis\" is not a valid date!");
+			System.out.println("Field \"Datum von\" or \"Datum bis\" in TabPane \"Suche\" is not a valid date!");
+			return;
+		}
+		
 		ArrayList<Invoice> searchResultList = proxy.searchInvoice(searchInvoiceCustomer.getText(), 
 				searchInvoiceDateFrom.getText(), searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), 
 				searchInvoiceValueTo.getText());
@@ -99,7 +125,7 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void newInvoice() {
-		Invoice invoice = new Invoice();		
+		Invoice invoice = new Invoice();	
 		openEmptyInvoiceWindow(invoice);
 		clearMessages();
 	}
@@ -152,7 +178,7 @@ public class MainController<T> implements Initializable{
 		}
 	}
 	
-	private void openCustomerWindow(ArrayList<Customer> searchResultList) {		
+	private void openCustomerWindow(ArrayList<Customer> searchResultList, CustomerSearchQuery search) {		
 		if(searchResultList.size() < 1){
 			messageLabelSuche.setText("No search results found!");
 			return;
@@ -168,6 +194,7 @@ public class MainController<T> implements Initializable{
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
 			SearchresultCustomerController controller = fxmlLoader.<SearchresultCustomerController>getController();
+			controller.setSearch(search);
 			controller.setSearchResultList(searchResultList);
 			controller.displaySearchresult();
 			secondStage.show();			

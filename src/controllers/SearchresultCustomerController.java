@@ -5,7 +5,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import proxy.Proxy;
 import contacts.Customer;
+import contacts.CustomerSearchQuery;
 import models.SearchCustomerModel;
 import models.SearchresultCustomerTableModel;
 import javafx.collections.ObservableList;
@@ -25,11 +27,14 @@ import javafx.stage.StageStyle;
 public class SearchresultCustomerController implements Initializable {
 	
 	private ArrayList<Customer> searchresultList;
+	private CustomerSearchQuery search;
+	private Proxy proxy;
 	
 	@FXML TableView<SearchCustomerModel> searchresultTable;
 	@FXML TabPane tabPane;
 		
 	public void initialize(URL url, ResourceBundle resources) {
+		this.proxy = new Proxy();
 		searchresultTable.setPlaceholder(new Text(""));
 		searchresultTable.setEditable(false);
 		applyBindings();
@@ -57,6 +62,12 @@ public class SearchresultCustomerController implements Initializable {
 		});
 	}
 	
+	public void updateSearchresult() {
+		searchresultList = proxy.searchCustomer(search.get_surname(), search.get_lastname(),
+				search.get_name());
+		displaySearchresult();
+	}
+	
 	private void openCustomerWindow(Customer searchResult) {		
 		if(searchResult == null){
 			return;
@@ -72,6 +83,7 @@ public class SearchresultCustomerController implements Initializable {
 			secondStage.setTitle("SWE 2 - MikroERP");
 			
 			CustomerController controller = fxmlLoader.<CustomerController>getController();
+			controller.setSearchController(this);
 			controller.setSearchResult(searchResult);
 			controller.displaySearchresult();
 			secondStage.show();
@@ -87,5 +99,13 @@ public class SearchresultCustomerController implements Initializable {
 
 	public void setSearchResultList(ArrayList<Customer> searchresultList) {
 		this.searchresultList = searchresultList;
+	}
+
+	public CustomerSearchQuery getSearch() {
+		return search;
+	}
+
+	public void setSearch(CustomerSearchQuery search) {
+		this.search = search;
 	}
 }

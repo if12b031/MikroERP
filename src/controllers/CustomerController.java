@@ -21,8 +21,9 @@ import contacts.Customer;
 public class CustomerController implements Initializable{
 	
 	private CustomerPresentationModel presentationModel;
-	private Proxy proxy;
 	private Customer searchResult;
+	private Proxy proxy;
+	private SearchresultCustomerController searchController;
 		
 	@FXML TabPane tabPane;
 	
@@ -116,21 +117,26 @@ public class CustomerController implements Initializable{
 				customer.set_plz(Integer.parseInt(customerPLZ.getText()));
 				customer.set_city(customerCity.getText());
 				
-				if(proxy.createCustomer(customer) == 0){
-					clearNewCustomer();	
+				int create = proxy.createCustomer(customer);
+				if(create == 0 && customer.get_id() <= 0){
+					clearNewCustomer();
 					messageLabelKunde.setText("New Customer created!");
 					System.out.println("New Customer created!");
-				} else {
-					messageLabelKunde.setText("Error while creating new Customer!");
-					System.out.println("Error while creating new Customer!");
+				} else if(create == 0 && customer.get_id() > 0){
+					messageLabelKunde.setText("Customer updated!");
+					System.out.println("Customer updated!");
+					searchController.updateSearchresult();
+				} else{
+					messageLabelKunde.setText("Error while creating/updating Customer!");
+					System.out.println("Error while creating/updating Customer!");
 				}
 			} catch(NumberFormatException e){
-				messageLabelKunde.setText("Field \"PLZ\" in TabPane \"Kunde\" is not an Integer!");
+				messageLabelKunde.setText("Field \"PLZ\" is not an Integer!");
 				System.out.println("Field \"PLZ\" in TabPane \"Kunde\" is not an Integer!");
 			}
 		} else{
-			messageLabelKunde.setText("One or more required fields in TabPane \"Kunde\" is empty!");
-			System.out.println("One or more required fields in TabPane \"Kunde\" is empty!");
+			messageLabelKunde.setText("One or more required fields are empty!");
+			System.out.println("One or more required fields in TabPane \"Kunde\" are empty!");
 		}
 	}
 	
@@ -167,5 +173,13 @@ public class CustomerController implements Initializable{
 
 	public void setSearchResult(Customer searchResult) {
 		this.searchResult = searchResult;
+	}
+
+	public SearchresultCustomerController getSearchController() {
+		return searchController;
+	}
+
+	public void setSearchController(SearchresultCustomerController searchController) {
+		this.searchController = searchController;
 	}
 }

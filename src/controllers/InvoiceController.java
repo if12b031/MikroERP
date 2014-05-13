@@ -3,7 +3,10 @@ package controllers;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import models.InvoiceElementModel;
@@ -11,6 +14,7 @@ import models.InvoicePresentationModel;
 import models.InvoiceTableModel;
 import proxy.Proxy;
 import utils.Utils;
+import invoice.CalculatedValues;
 import invoice.Invoice;
 import invoice.InvoiceElement;
 import javafx.beans.value.ChangeListener;
@@ -168,65 +172,85 @@ public class InvoiceController<T> implements Initializable {
 		}
 		
 		if(searchResult.get_id() > 0){
+			/* Buttons */
 			createInvoice.setText("Update");
+			createInvoice.setDisable(true);
 			clearInvoice.setDisable(true);
+			addElement.setDisable(true);
+			/* Textfields */
+			invoiceID.setDisable(true);
+			invoiceDate.setDisable(true);
+			invoiceCustomer.setDisable(true);
+			invoiceShippingAddress.setDisable(true);
+			invoiceAddress.setDisable(true);
+			invoiceComment.setDisable(true);
+			invoiceMessage.setDisable(true);
+			invoiceElement.setDisable(true);
+			invoiceDirection.setDisable(true);
+			invoiceElementAmount.setDisable(true);			
 		}
 	}
 	
 	@FXML private void createNewInvoice() {
-		if(checkInvoiceInput()){
-			try {
-				Invoice invoice = new Invoice();
-				boolean isOutgoing = false;
-				
-				if(((String)invoiceDirection.getValue()).equals("Ausgehend")){
-					isOutgoing = true;
-				}
-				invoice.set_id(searchResult.get_id());
-				invoice.set_invoiceNumber(Integer.parseInt(invoiceID.getText()));
-				invoice.set_isOutgoing(isOutgoing);
-				invoice.set_customerName(invoiceCustomer.getText());
-				invoice.set_creationDate(invoiceDate.getText());
-				invoice.set_comment(invoiceComment.getText());
-				invoice.set_message(invoiceMessage.getText());
-				invoice.set_shippingAddress(invoiceShippingAddress.getText());
-				invoice.set_invoiceAddress(invoiceAddress.getText());
-				invoice.set_articles(addedInvoiceElements);
-				
-				String invUst = invoiceUst.getText().replaceAll("Ust: ", "");
-				String invNet = invoiceNet.getText().replaceAll("Netto: ", "");
-				String invTotal = invoiceTotal.getText().replaceAll("Total: ", "");
-				
-				double ust = Double.parseDouble(invUst.replaceAll(",", "."));
-				double net = Double.parseDouble(invNet.replaceAll(",", "."));
-				double total = Double.parseDouble(invTotal.replaceAll(",", "."));
-				
-				invoice.set_net(net);
-				invoice.set_ust(ust);
-				invoice.set_gross(total);
-				
-				if(proxy.createInvoice(invoice) == 0){
-					clearNewInvoice();					
-					messageLabelRechnung.setText("New Invoice created!");
-					System.out.println("New Invoice created!");
-				} else {
-					messageLabelRechnung.setText("Error while creating new Invoice!");
-					System.out.println("Error while creating new Invoice!");
-				}
-				
-				messageLabelRechnung.setText("New Invoice created!");
-				System.out.println("New Invoice created!");
-			} catch(NumberFormatException e){
-				e.printStackTrace();
-				messageLabelRechnung.setText("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
-				System.out.println("Field \"Rechnungsnummer\" in TabPane \"Rechnung\" is not an Integer!");
-			} catch(NullPointerException e){
-				messageLabelRechnung.setText("One or more required fields in TabPane \"Rechnung\" is empty!");
-				System.out.println("One or more required fields in TabPane \"Rechnung\" is empty!");
-			} 
-		} else{
-			messageLabelRechnung.setText("One or more required fields in TabPane \"Rechnung\" is empty!");
-			System.out.println("One or more required fields in TabPane \"Rechnung\" is empty!");
+		switch(checkInvoiceInput()){
+			case 0:	try {
+						Invoice invoice = new Invoice();
+						boolean isOutgoing = false;
+						
+						if(((String)invoiceDirection.getValue()).equals("Ausgehend")){
+							isOutgoing = true;
+						}
+						invoice.set_id(searchResult.get_id());
+						invoice.set_invoiceNumber(Integer.parseInt(invoiceID.getText()));
+						invoice.set_isOutgoing(isOutgoing);
+						invoice.set_customerName(invoiceCustomer.getText());
+						invoice.set_creationDate(invoiceDate.getText());
+						invoice.set_comment(invoiceComment.getText());
+						invoice.set_message(invoiceMessage.getText());
+						invoice.set_shippingAddress(invoiceShippingAddress.getText());
+						invoice.set_invoiceAddress(invoiceAddress.getText());
+						invoice.set_articles(addedInvoiceElements);
+						
+						String invUst = invoiceUst.getText().replaceAll("Ust: ", "");
+						String invNet = invoiceNet.getText().replaceAll("Netto: ", "");
+						String invTotal = invoiceTotal.getText().replaceAll("Total: ", "");
+						
+						double ust = Double.parseDouble(invUst.replaceAll(",", "."));
+						double net = Double.parseDouble(invNet.replaceAll(",", "."));
+						double total = Double.parseDouble(invTotal.replaceAll(",", "."));
+						
+						invoice.set_net(net);
+						invoice.set_ust(ust);
+						invoice.set_gross(total);
+						
+						if(proxy.createInvoice(invoice) == 0){
+							clearNewInvoice();					
+							messageLabelRechnung.setText("New Invoice created!");
+							System.out.println("New Invoice created!");
+						} else {
+							messageLabelRechnung.setText("Error while creating new Invoice!");
+							System.out.println("Error while creating new Invoice!");
+						}
+					} catch(NumberFormatException e){
+
+					} catch(NullPointerException e){
+						
+					}
+					break;
+			case 1:	messageLabelRechnung.setText("Field \"ID\" is not an Integer!");
+					System.out.println("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
+					break;
+			case 2: messageLabelRechnung.setText("Field \"Richtung\" is not selected!");
+					System.out.println("Field \"Richtung\" in TabPane \"Rechnung\" is not selected!");
+					break;
+			case 3: messageLabelRechnung.setText("Field \"Rechnungsdatum\" is not a valid date!");
+					System.out.println("Field \"Rechnungsdatum\" in TabPane \"Rechnung\" is not a valid date!");
+					break;
+			case 4: messageLabelRechnung.setText("One or more required fields are empty!");
+					System.out.println("One or more required fields in TabPane \"Rechnung\" are empty!");
+					break;
+			default:	messageLabelRechnung.setText("One or more required fields are empty!");
+						System.out.println("One or more required fields in TabPane \"Rechnung\" are empty!");
 		}
 	}
 	
@@ -245,27 +269,37 @@ public class InvoiceController<T> implements Initializable {
 	
 	@FXML private void addElement() {
 		clearMessages();
-		if(checkInvoiceELementInput()){
-			try {
-				InvoiceElement invElem = new InvoiceElement();
-				int index = invoiceElement.getSelectionModel().getSelectedIndex();
-				
-				invElem.set_name(allInvoiceElements.get(index).get_name());
-				invElem.set_amount(Integer.parseInt(invoiceElementAmount.getText()));
-				invElem.set_price((allInvoiceElements.get(index).get_price()));
-				addedInvoiceElements.add(invElem);
-				clearAddElement();
-				displayInvoiceElements();
-				calculateInvoiceValues();
-			} catch(NumberFormatException e){
-				e.printStackTrace();
-				messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
-				System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
-			}
+		switch(checkInvoiceELementInput()){
+			case 0:	try {
+						InvoiceElement invElem = new InvoiceElement();
+						int index = invoiceElement.getSelectionModel().getSelectedIndex();
+						
+						invElem.set_name(allInvoiceElements.get(index).get_name());
+						invElem.set_amount(Integer.parseInt(invoiceElementAmount.getText()));
+						invElem.set_price((allInvoiceElements.get(index).get_price()));
+						addedInvoiceElements.add(invElem);
+						clearAddElement();
+						displayInvoiceElements();
+						calculateInvoiceValues();
+					} catch(NumberFormatException e){
+		
+					}
+					break;
+			case 1:	messageLabelRechnung.setText("Field \"Menge\" is not an Integer!");
+					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
+					break;
+			case 2:	messageLabelRechnung.setText("Field \"Bezeichnung\" is not selected!");
+					System.out.println("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
+					break;
+			case 3:	messageLabelRechnung.setText("Field \"Menge\" is not valid!");
+					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
+					break;
+			default:	messageLabelRechnung.setText("One or more required fields related to \"Artikel\" are empty!");
+						System.out.println("One or more required fields related to \"Artikel\" are empty!");
 		}
 	}
 	
-	private boolean checkInvoiceInput() {
+	private int checkInvoiceInput() {
 		try {
 			if(Integer.parseInt(invoiceID.getText()) > 0
 				&& !Utils.isNullOrEmpty(invoiceDate.getText())
@@ -274,36 +308,37 @@ public class InvoiceController<T> implements Initializable {
 				&& !Utils.isNullOrEmpty(invoiceShippingAddress.getText())
 				&& !Utils.isNullOrEmpty(invoiceAddress.getText())
 				&& !elementTable.getItems().isEmpty()){
-				return true;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				sdf.setLenient(false);
+				@SuppressWarnings("unused")
+				Date convertedDate = sdf.parse(invoiceDate.getText());
+				return 0;
 			} 
 		} catch(NumberFormatException e){
-			messageLabelRechnung.setText("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
-			System.out.println("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
+			return 1;
 		} catch(NullPointerException e){
-			messageLabelRechnung.setText("Field \"Richtung\" in TabPane \"Rechnung\" is not selected!");
-			System.out.println("Field \"Richtung\" in TabPane \"Rechnung\" is not selected!");
-		}	
-		return false;
+			return 2;
+		} catch (ParseException e) {
+			return 3;
+		}
+		return 4;
 	}
 	
-	private boolean checkInvoiceELementInput() {
+	private int checkInvoiceELementInput() {
 		try {
 			if(!invoiceElement.getValue().toString().equals("Bezeichnung")
 				&& Integer.parseInt(invoiceElementAmount.getText()) > 0) {
-				return true;
+				return 0;
 			}
 		} catch(NumberFormatException e){
-			messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
-			System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
+			return 1;
 		} catch(NullPointerException e){
-			messageLabelRechnung.setText("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
-			System.out.println("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
+			return 2;
 		}
 		if(Integer.parseInt(invoiceElementAmount.getText()) <= 0){
-			messageLabelRechnung.setText("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
-			System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
+			return 3;
 		}
-		return false;
+		return 4;
 	}
 	
 	private void displayInvoiceElements() {
@@ -311,41 +346,41 @@ public class InvoiceController<T> implements Initializable {
 		ObservableList<InvoiceElementModel> items = (ObservableList<InvoiceElementModel>) tableModel.getItems();
 		
 		elementTable.setItems(items);
-		elementTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event) {
-			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
-			    	int index = elementTable.getSelectionModel().getSelectedIndex();
-			    	if(index >= 0){
-			    		addedInvoiceElements.remove(index);
-			    		displayInvoiceElements();
-			    		calculateInvoiceValues();
-			    	}
-			    }
-			}
-		});
+		if(searchResult.get_id() <= 0){
+			elementTable.setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent event) {
+				    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
+				    	int index = elementTable.getSelectionModel().getSelectedIndex();
+				    	if(index >= 0){
+				    		addedInvoiceElements.remove(index);
+				    		displayInvoiceElements();
+				    		calculateInvoiceValues();
+				    	}
+				    }
+				}
+			});
+		}
 	}
 	
 	private void calculateInvoiceValues() {
-		double net = 0;
-		double ust = 0;
-		double total = 0;
+		ArrayList<Double> prices = new ArrayList<Double>();
 		
 		for(int i=0; i<addedInvoiceElements.size(); i++){
 			double price = addedInvoiceElements.get(i).get_price();
 			int amount = addedInvoiceElements.get(i).get_amount();
-			net += (price * amount) / 120 * 100;
-			ust += (price * amount) / 120 * 20;
-			total += price * amount;
+			prices.add(price*amount);
 		}
+		
+		CalculatedValues values = proxy.calculateValue(prices);
 		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
 		symbols.setDecimalSeparator(',');
 		symbols.setGroupingSeparator('.');
 		DecimalFormat format = new DecimalFormat("###,##0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
 		
-		invoiceNet.setText("Netto: " + format.format(net));
-		invoiceUst.setText("Ust: " + format.format(ust));
-		invoiceTotal.setText("Total: " + format.format(total));
+		invoiceNet.setText("Netto: " + format.format(values.get_net()));
+		invoiceUst.setText("Ust: " + format.format(values.get_ust()));
+		invoiceTotal.setText("Total: " + format.format(values.get_gross()));
 	}
 	
 	private void clearAddElement() {

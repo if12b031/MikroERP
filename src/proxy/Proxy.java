@@ -1,5 +1,6 @@
 package proxy;
 
+import invoice.CalculatedValues;
 import invoice.Invoice;
 import invoice.InvoiceElement;
 import invoice.InvoiceList;
@@ -47,8 +48,7 @@ public class Proxy {
 	        
 	        xs.alias("Customer", Customer.class);
 			xs.alias("CustomerList", CustomerList.class);
-			xs.addImplicitCollection(CustomerList.class, "_customerList");
-			
+			xs.addImplicitCollection(CustomerList.class, "_customerList");			
 	        CustomerList searchResult = (CustomerList) xs.fromXML(XMLResponse);
 	        return searchResult.getCustomers();			
 		} catch (IOException e){
@@ -87,8 +87,7 @@ public class Proxy {
 	        
 	        xs.alias("Invoice", Invoice.class);
 			xs.alias("InvoiceList", InvoiceList.class);
-			xs.addImplicitCollection(InvoiceList.class, "_invoiceList");
-			
+			xs.addImplicitCollection(InvoiceList.class, "_invoiceList");			
 			InvoiceList searchResult = (InvoiceList) xs.fromXML(XMLResponse);
 	        return searchResult.getInvoices();			
 		} catch (IOException e){
@@ -114,7 +113,6 @@ public class Proxy {
 	        xs.alias("Customer", Customer.class);
 	        // OBJECT --> XML
 	     	String xml = xs.toXML(customer);
-	     	System.out.println(xml);
 	        out.println("GET /MikroERP_Facade/createCustomer?customer=" + xml + " HTTP/1.1");
 			out.flush();
 			
@@ -152,7 +150,6 @@ public class Proxy {
 			xs.alias("InvoiceElement", InvoiceElement.class);
 	        // OBJECT --> XML
 	     	String xml = xs.toXML(invoice);
-	     	System.out.println(xml);
 	        out.println("GET /MikroERP_Facade/createInvoice?invoice=" + xml + " HTTP/1.1");
 			out.flush();
 			
@@ -198,11 +195,47 @@ public class Proxy {
 	        in.close();
 	        socket.close();
 	        
-	        xs.alias("InvoiceElement", InvoiceElement.class);
-			
+	        xs.alias("InvoiceElement", InvoiceElement.class);			
 			@SuppressWarnings("unchecked")
 			ArrayList<InvoiceElement> searchResult = (ArrayList<InvoiceElement>) xs.fromXML(XMLResponse);
 	        return searchResult;			
+		} catch (IOException e){
+			System.out.println("Failed to create new socket!");
+		} catch (NullPointerException e){
+			System.out.println("No search results!");
+		}
+		return null;
+	}
+	
+	public CalculatedValues calculateValue(ArrayList<Double> prices) {
+		try {
+			String XMLResponse = "";
+			String buffer;
+			StringBuilder strBuilder = new StringBuilder();
+			XStream xs = new XStream(new StaxDriver());
+			Socket socket = new Socket("localhost", 8080);
+	        PrintWriter out = new PrintWriter(socket.getOutputStream());
+	        BufferedReader in = new BufferedReader(
+	                new InputStreamReader(
+	                		socket.getInputStream()));
+	        
+	        // OBJECT --> XML
+	     	String xml = xs.toXML(prices);
+	        out.println("GET /MikroERP_Facade/calculateValue?calculate=" + xml +" HTTP/1.1");
+			out.flush();	        
+	
+	        while ((buffer = in.readLine()) != null){
+	        	strBuilder.append(buffer);
+	        }
+	        
+	        XMLResponse = strBuilder.toString();
+	        
+	        in.close();
+	        socket.close();
+	        
+	        xs.alias("CalculatedValues", CalculatedValues.class);			
+			CalculatedValues values = (CalculatedValues) xs.fromXML(XMLResponse);
+	        return values;
 		} catch (IOException e){
 			System.out.println("Failed to create new socket!");
 		} catch (NullPointerException e){
