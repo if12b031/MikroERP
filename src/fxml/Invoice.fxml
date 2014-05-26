@@ -106,6 +106,7 @@
 			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
 				<Button fx:id="createInvoice" onAction="#createNewInvoice" styleClass="createButton">Anlegen</Button>
 				<Button fx:id="clearInvoice" onAction="#clearNewInvoice" styleClass="createButton">Leeren</Button>
+				<Button fx:id="printInvoice" onAction="#printInvoice" styleClass="createButton">Drucken</Button>
 				<Button fx:id="cancelInvoice" onAction="#cancelNewInvoice" styleClass="createButton">Abbruch</Button>
 			</HBox>
 			<HBox styleClass="hbox" alignment="BASELINE_CENTER">

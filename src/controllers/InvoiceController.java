@@ -1,5 +1,10 @@
 package controllers;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -8,6 +13,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import models.InvoiceElementModel;
 import models.InvoicePresentationModel;
@@ -64,6 +76,7 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private Button createInvoice;
 	@FXML private Button clearInvoice;
 	@FXML private Button cancelInvoice;
+	@FXML private Button printInvoice;
 	@FXML private Button addElement;
 	@FXML private Label invoiceNet;
 	@FXML private Label invoiceUst;
@@ -81,6 +94,7 @@ public class InvoiceController<T> implements Initializable {
 		});
 		elementTable.setPlaceholder(new Text(""));
 		elementTable.setEditable(false);
+		printInvoice.setDisable(true);
 		applyBindings();
 		setArticles();
 	}
@@ -177,6 +191,7 @@ public class InvoiceController<T> implements Initializable {
 			createInvoice.setDisable(true);
 			clearInvoice.setDisable(true);
 			addElement.setDisable(true);
+			printInvoice.setDisable(false);
 			/* Textfields */
 			invoiceID.setDisable(true);
 			invoiceDate.setDisable(true);
@@ -188,6 +203,38 @@ public class InvoiceController<T> implements Initializable {
 			invoiceElement.setDisable(true);
 			invoiceDirection.setDisable(true);
 			invoiceElementAmount.setDisable(true);			
+		}
+	}
+	
+	@FXML private void addElement() {
+		clearMessages();
+		switch(checkInvoiceELementInput()){
+			case 0:	try {
+						InvoiceElement invElem = new InvoiceElement();
+						int index = invoiceElement.getSelectionModel().getSelectedIndex();
+						
+						invElem.set_name(allInvoiceElements.get(index).get_name());
+						invElem.set_amount(Integer.parseInt(invoiceElementAmount.getText()));
+						invElem.set_price((allInvoiceElements.get(index).get_price()));
+						addedInvoiceElements.add(invElem);
+						clearAddElement();
+						displayInvoiceElements();
+						calculateInvoiceValues();
+					} catch(NumberFormatException e){
+		
+					}
+					break;
+			case 1:	messageLabelRechnung.setText("Field \"Menge\" is not an Integer!");
+					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
+					break;
+			case 2:	messageLabelRechnung.setText("Field \"Bezeichnung\" is not selected!");
+					System.out.println("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
+					break;
+			case 3:	messageLabelRechnung.setText("Field \"Menge\" is not valid!");
+					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
+					break;
+			default:	messageLabelRechnung.setText("One or more required fields related to \"Artikel\" are empty!");
+						System.out.println("One or more required fields related to \"Artikel\" are empty!");
 		}
 	}
 	
@@ -253,7 +300,7 @@ public class InvoiceController<T> implements Initializable {
 						System.out.println("One or more required fields in TabPane \"Rechnung\" are empty!");
 		}
 	}
-	
+			
 	@FXML private void clearNewInvoice() {
 		presentationModel.clearInvoice();
 		elementTable.setItems(null);
@@ -267,36 +314,48 @@ public class InvoiceController<T> implements Initializable {
 	    stage.close();
 	}
 	
-	@FXML private void addElement() {
-		clearMessages();
-		switch(checkInvoiceELementInput()){
-			case 0:	try {
-						InvoiceElement invElem = new InvoiceElement();
-						int index = invoiceElement.getSelectionModel().getSelectedIndex();
-						
-						invElem.set_name(allInvoiceElements.get(index).get_name());
-						invElem.set_amount(Integer.parseInt(invoiceElementAmount.getText()));
-						invElem.set_price((allInvoiceElements.get(index).get_price()));
-						addedInvoiceElements.add(invElem);
-						clearAddElement();
-						displayInvoiceElements();
-						calculateInvoiceValues();
-					} catch(NumberFormatException e){
-		
-					}
-					break;
-			case 1:	messageLabelRechnung.setText("Field \"Menge\" is not an Integer!");
-					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not an Integer!");
-					break;
-			case 2:	messageLabelRechnung.setText("Field \"Bezeichnung\" is not selected!");
-					System.out.println("Field \"Bezeichnung\" in TabPane \"Rechnung\" is not selected!");
-					break;
-			case 3:	messageLabelRechnung.setText("Field \"Menge\" is not valid!");
-					System.out.println("Field \"Menge\" in TabPane \"Rechnung\" is not valid!");
-					break;
-			default:	messageLabelRechnung.setText("One or more required fields related to \"Artikel\" are empty!");
-						System.out.println("One or more required fields related to \"Artikel\" are empty!");
-		}
+	@FXML private void printInvoice() {
+		Document document = new Document();
+		List orderedList = new List(List.ORDERED);
+		DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance();
+		symbols.setDecimalSeparator('.');
+		DecimalFormat format = new DecimalFormat("#0.00", symbols); // format input to 2 decimal places (e.g. 20,1344 to 20,13)
+		try {
+			for(int i=0; i<addedInvoiceElements.size(); i++){
+				InvoiceElement elem = addedInvoiceElements.get(i);
+				orderedList.add(new ListItem(i + ". " + elem.get_name() + ": " + format.format(elem.get_price()) +
+						" x " + elem.get_amount() + " = " + format.format(elem.get_price()*elem.get_amount())));
+			}
+            
+			PdfWriter.getInstance(document,
+                    new FileOutputStream("InvoicePDFs/Invoice_" + searchResult.get_invoiceNumber() + ".pdf"));
+        	
+			document.open();
+            document.add(new Paragraph("Invoice Number: " + searchResult.get_invoiceNumber()));
+            document.add(new Paragraph("Creation Date: " + searchResult.get_creationDate()));
+            document.add(new Paragraph("Customer: " + searchResult.get_customerName()));
+            document.add(new Paragraph("Invoice Address: " + searchResult.get_invoiceAddress()));
+            document.add(new Paragraph("Shipping Address: " + searchResult.get_shippingAddress()));
+            document.add(new Paragraph("Comment: " + searchResult.get_comment()));
+            document.add(new Paragraph("Message: " + searchResult.get_message()));
+            document.add(orderedList);
+            document.add(new Paragraph("Net: " + format.format(searchResult.get_net())));
+            document.add(new Paragraph("Ust: " + format.format(searchResult.get_ust())));
+            document.add(new Paragraph("Total: " + format.format(searchResult.get_gross())));
+            document.close();
+            
+            /* open PDF in PDF viewing program installed on PC */
+            if (Desktop.isDesktopSupported()) {
+            	File myFile = new File("InvoicePDFs/Invoice_" + searchResult.get_invoiceNumber() + ".pdf");
+                Desktop.getDesktop().open(myFile);
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	private int checkInvoiceInput() {

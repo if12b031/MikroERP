@@ -192,7 +192,7 @@ public class MainController<T> implements Initializable{
 			if(!Utils.isNullOrEmpty(searchInvoiceDateTo.getText())){
 				convertedDate = sdf.parse(searchInvoiceDateTo.getText());
 			}
-		} catch (ParseException e) {
+		} catch (ParseException e){
 			messageLabelSuche.setText("Field \"Datum von\" or \"Datum bis\" is not a valid date!");
 			System.out.println("Field \"Datum von\" or \"Datum bis\" in TabPane \"Suche\" is not a valid date!");
 			return;
@@ -201,7 +201,7 @@ public class MainController<T> implements Initializable{
 		ArrayList<Invoice> searchResultList = proxy.searchInvoice(searchInvoiceCustomer.getText(), 
 				searchInvoiceDateFrom.getText(), searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), 
 				searchInvoiceValueTo.getText());
-		if(searchResultList == null) {
+		if(searchResultList == null){
 			messageLabelSuche.setText("No search results found!");
 			return;
 		}
