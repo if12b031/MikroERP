@@ -30,8 +30,8 @@ public class SearchresultCustomerController implements Initializable {
 	private CustomerSearchQuery search;
 	private Proxy proxy;
 	
-	@FXML TableView<SearchCustomerModel> searchresultTable;
-	@FXML TabPane tabPane;
+	@FXML private TableView<SearchCustomerModel> searchresultTable;
+	@FXML private TabPane tabPane;
 		
 	public void initialize(URL url, ResourceBundle resources) {
 		this.proxy = new Proxy();
@@ -77,7 +77,7 @@ public class SearchresultCustomerController implements Initializable {
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 730);
+			Scene scene = new Scene(root, 550, 740);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");

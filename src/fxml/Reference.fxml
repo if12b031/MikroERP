@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+<?import java.lang.*?>
+<?import utils.TitledBorder?>
+
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="controllers.ReferenceController">
+	<Tab text="Suchergebnisse">
+		<VBox styleClass="borderedBox">
+			<TitledBorder title="Suche nach Kunden">
+				<VBox styleClass="textField">
+					<HBox styleClass="hbox">
+						<Label styleClass="searchLabel" prefWidth="80">Vorname:</Label>
+						<TextField fx:id="searchCustomerName" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="searchLabel" prefWidth="80">Nachname:</Label>
+						<TextField fx:id="searchCustomerLastName" styleClass="padding" prefWidth="200" />				
+					</HBox>
+					<HBox styleClass="hbox">
+						<Label styleClass="searchLabel" prefWidth="80">Firmenname:</Label>
+						<TextField fx:id="searchCustomerCompany" styleClass="padding" prefWidth="200" />
+					</HBox>
+				</VBox>
+			</TitledBorder>
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="searchCustomer" onAction="#searchCustomer" styleClass="createButton">Suchen</Button>
+			</HBox>
+			<TitledBorder title="Kunden">
+				<VBox styleClass="textField">
+					<TableView fx:id="searchresultTable" prefHeight="400" >
+						<columns>
+							<TableColumn text="Titel" prefWidth="60" minWidth="60">
+								<cellValueFactory>
+									<PropertyValueFactory property="title" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Name/Firma" prefWidth="105" minWidth="105" >
+								<cellValueFactory>
+									<PropertyValueFactory property="name" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Nachname/UID" prefWidth="105" minWidth="105" >
+								<cellValueFactory>
+									<PropertyValueFactory property="lastname" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Geboren" prefWidth="80" minWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="birthday" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Adresse" prefWidth="120" minWidth="120" >
+								<cellValueFactory>
+									<PropertyValueFactory property="address" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="PLZ" prefWidth="50" minWidth="50" >
+								<cellValueFactory>
+									<PropertyValueFactory property="plz" />
+								</cellValueFactory>
+							</TableColumn>
+							<TableColumn text="Ort" prefWidth="80" minWidth="80" >
+								<cellValueFactory>
+									<PropertyValueFactory property="city" />
+								</cellValueFactory>
+							</TableColumn>
+						</columns>
+					</TableView>
+				</VBox>
+			</TitledBorder>
+			<HBox styleClass="hbox" alignment="BASELINE_RIGHT">
+				<Button fx:id="setCompany" onAction="#setReference" styleClass="createButton">Wählen</Button>
+			</HBox>
+		</VBox>
+	</Tab>
+</TabPane>

@@ -2,18 +2,17 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import models.MainPresentationModel;
 import proxy.Proxy;
-import utils.Utils;
 import invoice.Invoice;
 import contacts.Customer;
 import contacts.CustomerSearchQuery;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -29,7 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -37,17 +36,12 @@ public class MainController<T> implements Initializable{
 	
 	private MainPresentationModel presentationModel;
 	private Proxy proxy;
+	private DatePicker dateFrom;
+	private DatePicker dateTo;
 		
 	@FXML TabPane tabPane;
 	
-	/* Variables related to TabPane Start */
-	@FXML private Text totalCustomers;
-	@FXML private Text totalInvoices;
-	@FXML private Label messageLabelStart;
-	
 	/* Variables related to TabPane Suche */
-	@FXML private TextField searchInvoiceDateFrom;
-	@FXML private TextField searchInvoiceDateTo;
 	@FXML private TextField searchInvoiceValueFrom;
 	@FXML private TextField searchInvoiceValueTo;
 	@FXML private TextField searchInvoiceCustomer;
@@ -57,6 +51,7 @@ public class MainController<T> implements Initializable{
 	@FXML private Label messageLabelSuche;
 	@FXML private Button searchInvoice;
 	@FXML private Button searchCustomer;
+	@FXML private HBox searchDateBox;
 	
 	public void initialize(URL url, ResourceBundle resources) {
 		this.presentationModel = new MainPresentationModel();
@@ -66,8 +61,42 @@ public class MainController<T> implements Initializable{
 		        clearMessages();
 		    }
 		});
-		applyBindings();
-		applyEventHandlers();
+		
+		// Initialize the DatePicker search date
+        dateFrom = new DatePicker(Locale.GERMAN);
+        dateFrom.setPrefWidth(100);
+        dateFrom.setPromptText("YYYY-MM-DD");
+        dateFrom.getStyleClass().add("padding");
+        dateFrom.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        dateFrom.getCalendarView().todayButtonTextProperty().set("Today");
+        dateFrom.getCalendarView().setShowWeeks(false);
+        dateFrom.getStylesheets().add("main/application.css");
+
+        // Add DatePicker to HBox
+        searchDateBox.getChildren().add(dateFrom);
+        
+        // Add Label to HBox
+        Label label = new Label();
+        label.getStyleClass().add("searchLabel");
+        label.setPrefWidth(20);
+        label.setText("bis:");
+        searchDateBox.getChildren().add(label);
+        
+        // Initialize the DatePicker for search date
+        dateTo = new DatePicker(Locale.GERMAN);
+        dateTo.setPrefWidth(100);
+        dateTo.setPromptText("YYYY-MM-DD");
+        dateTo.getStyleClass().add("padding");
+        dateTo.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        dateTo.getCalendarView().todayButtonTextProperty().set("Today");
+        dateTo.getCalendarView().setShowWeeks(false);
+        dateTo.getStylesheets().add("main/application.css");
+
+        // Add DatePicker to HBox
+        searchDateBox.getChildren().add(dateTo);
+        
+        applyBindings();
+        applyEventHandlers();
 	}
 
 	private void applyBindings() {
@@ -85,7 +114,7 @@ public class MainController<T> implements Initializable{
 	
 	private void applyEventHandlers() {
 		/* Events for Textfields related to Invoice search */
-		searchInvoiceDateFrom.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		dateFrom.setOnKeyReleased(new EventHandler<KeyEvent>() {
 		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
 		    public void handle(KeyEvent t) {
 		        if (combo.match(t)) {
@@ -94,7 +123,7 @@ public class MainController<T> implements Initializable{
 		    }
 		});
 		
-		searchInvoiceDateTo.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		dateTo.setOnKeyReleased(new EventHandler<KeyEvent>() {
 		    final KeyCombination combo = new KeyCodeCombination(KeyCode.ENTER);
 		    public void handle(KeyEvent t) {
 		        if (combo.match(t)) {
@@ -181,25 +210,22 @@ public class MainController<T> implements Initializable{
 	}
 	
 	@FXML private void searchForInvoice() {
-		try{
-			@SuppressWarnings("unused")
-			Date convertedDate = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			sdf.setLenient(false);
-			if(!Utils.isNullOrEmpty(searchInvoiceDateFrom.getText())){
-				convertedDate = sdf.parse(searchInvoiceDateFrom.getText());
-			}
-			if(!Utils.isNullOrEmpty(searchInvoiceDateTo.getText())){
-				convertedDate = sdf.parse(searchInvoiceDateTo.getText());
-			}
-		} catch (ParseException e){
+		if( dateFrom.invalidProperty().get() ||
+		        dateTo.invalidProperty().get() ) {
 			messageLabelSuche.setText("Field \"Datum von\" or \"Datum bis\" is not a valid date!");
 			System.out.println("Field \"Datum von\" or \"Datum bis\" in TabPane \"Suche\" is not a valid date!");
 			return;
 		}
-		
+		String dateFrom = "";
+		String dateTo = "";
+		if ( this.dateFrom.getSelectedDate() != null) {
+		    dateFrom = new SimpleDateFormat("yyyy-MM-dd").format(this.dateFrom.getSelectedDate());
+		}
+		if ( this.dateTo.getSelectedDate() != null) {
+		    dateTo = new SimpleDateFormat("yyyy-MM-dd").format(this.dateTo.getSelectedDate());
+        }		
 		ArrayList<Invoice> searchResultList = proxy.searchInvoice(searchInvoiceCustomer.getText(), 
-				searchInvoiceDateFrom.getText(), searchInvoiceDateTo.getText(), searchInvoiceValueFrom.getText(), 
+				dateFrom, dateTo, searchInvoiceValueFrom.getText(), 
 				searchInvoiceValueTo.getText());
 		if(searchResultList == null){
 			messageLabelSuche.setText("No search results found!");
@@ -249,7 +275,7 @@ public class MainController<T> implements Initializable{
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 730);
+			Scene scene = new Scene(root, 550, 740);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
@@ -298,7 +324,7 @@ public class MainController<T> implements Initializable{
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 730);
+			Scene scene = new Scene(root, 550, 740);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");
@@ -313,7 +339,6 @@ public class MainController<T> implements Initializable{
 	}
 	
 	private void clearMessages() {
-		messageLabelStart.setText("");
 		messageLabelSuche.setText("");
 	}
 }

@@ -46,11 +46,10 @@
 					<HBox styleClass="hbox">
 						<Label styleClass="customerLabel" prefWidth="80">Arbeitet bei:</Label>
 						<TextField fx:id="customerWorksAt" styleClass="padding" prefWidth="200" />
+						<Button fx:id="setCompany" onAction="#checkCompany" styleClass="createButton">Suchen</Button>
 					</HBox>
-					<HBox styleClass="hbox">
+					<HBox fx:id="birthdayBox" styleClass="hbox">
 						<Label styleClass="customerLabel" prefWidth="80">Geboren am:</Label>
-						<TextField fx:id="customerBirthday" styleClass="padding" prefWidth="200" />
-						<Label styleClass="customerLabel" prefWidth="100">(YYYY-MM-DD)</Label>
 					</HBox>				
 				</VBox>
 			</TitledBorder>			

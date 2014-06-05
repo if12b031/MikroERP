@@ -27,8 +27,8 @@ public class SearchresultInvoiceController implements Initializable {
 	
 	private ArrayList<Invoice> searchresultList;
 	
-	@FXML TableView<SearchInvoiceModel> searchresultTable;
-	@FXML TabPane tabPane;
+	@FXML private TableView<SearchInvoiceModel> searchresultTable;
+	@FXML private TabPane tabPane;
 		
 	public void initialize(URL url, ResourceBundle resources) {
 		searchresultTable.setPlaceholder(new Text(""));
@@ -67,7 +67,7 @@ public class SearchresultInvoiceController implements Initializable {
 			TabPane root = (TabPane)fxmlLoader.load();
 			
 			Stage secondStage = new Stage(StageStyle.DECORATED);		
-			Scene scene = new Scene(root, 550, 730);
+			Scene scene = new Scene(root, 550, 740);
 			scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
 			secondStage.setScene(scene);
 			secondStage.setTitle("SWE 2 - MikroERP");

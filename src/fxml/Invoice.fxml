@@ -27,14 +27,13 @@
 							</items>
 						</ComboBox>	
 					</HBox>			
-					<HBox styleClass="hbox">
+					<HBox fx:id="invoiceDateBox" styleClass="hbox">
 						<Label styleClass="invoiceLabel" prefWidth="120">*Rechnungsdatum:</Label>
-						<TextField fx:id="invoiceDate" styleClass="padding" prefWidth="200" />
-						<Label styleClass="customerLabel" prefWidth="100">(YYYY-MM-DD)</Label>
 					</HBox>				
 					<HBox styleClass="hbox">
 						<Label styleClass="invoiceLabel" prefWidth="120">*Kundenname:</Label>
 						<TextField fx:id="invoiceCustomer" styleClass="padding" prefWidth="200" />
+						<Button fx:id="setCustomer" onAction="#checkCustomer" styleClass="createButton">Suchen</Button>
 					</HBox>
 					<HBox styleClass="hbox">
 						<Label styleClass="invoiceLabel" prefWidth="120">*Lieferadresse:</Label>

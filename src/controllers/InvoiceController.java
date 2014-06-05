@@ -11,7 +11,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.itextpdf.text.Document;
@@ -21,6 +21,8 @@ import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import contacts.Customer;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import models.InvoiceElementModel;
 import models.InvoicePresentationModel;
 import models.InvoiceTableModel;
@@ -35,7 +37,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -47,8 +51,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -59,12 +66,14 @@ public class InvoiceController<T> implements Initializable {
 	private ArrayList<InvoiceElement> addedInvoiceElements = new ArrayList<InvoiceElement>();
 	private ArrayList<InvoiceElement> allInvoiceElements = new ArrayList<InvoiceElement>();
 	private Invoice searchResult;
+	private DatePicker datePicker;
+	private int invoiceCustomerId = 0;
+	private boolean wrongReference = true;
 		
 	@FXML TabPane tabPane;
 	
 	/* Variables related to TabPane Rechnung */
 	@FXML private TextField invoiceID;
-	@FXML private TextField invoiceDate;
 	@FXML private TextField invoiceCustomer;
 	@FXML private TextField invoiceShippingAddress;
 	@FXML private TextField invoiceAddress;
@@ -78,10 +87,12 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private Button cancelInvoice;
 	@FXML private Button printInvoice;
 	@FXML private Button addElement;
+	@FXML private Button setCustomer;
 	@FXML private Label invoiceNet;
 	@FXML private Label invoiceUst;
 	@FXML private Label invoiceTotal;
 	@FXML private Label messageLabelRechnung;
+	@FXML private HBox invoiceDateBox;
 	@FXML private TableView<InvoiceElementModel> elementTable;
 	
 	public void initialize(URL url, ResourceBundle resources) {
@@ -95,13 +106,41 @@ public class InvoiceController<T> implements Initializable {
 		elementTable.setPlaceholder(new Text(""));
 		elementTable.setEditable(false);
 		printInvoice.setDisable(true);
-		applyBindings();
-		setArticles();
+		
+		// Initialize the DatePicker for invoice date
+        datePicker = new DatePicker(Locale.GERMAN);
+        datePicker.setPrefWidth(200);
+        datePicker.setPromptText("YYYY-MM-DD");
+        datePicker.getStyleClass().add("padding");
+        datePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        datePicker.getCalendarView().todayButtonTextProperty().set("Today");
+        datePicker.getCalendarView().setShowWeeks(false);
+        datePicker.getStylesheets().add("main/application.css");
+
+        // Add DatePicker to HBox
+        invoiceDateBox.getChildren().add(datePicker);
+        
+        invoiceCustomer.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (newPropertyValue) {
+                    // textfield is focused: nothing happens
+                }
+                else {
+                    if(!Utils.isNullOrEmpty(invoiceCustomer.getText())) {
+                        checkCustomer();
+                    }
+                }
+            }
+        });
+        
+        applyBindings();
+        setArticles();
 	}
 
 	private void applyBindings() {
 		invoiceID.textProperty().bindBidirectional(presentationModel.invoiceIDProperty());
-		invoiceDate.textProperty().bindBidirectional(presentationModel.invoiceDateProperty());
 		invoiceCustomer.textProperty().bindBidirectional(presentationModel.invoiceCustomerProperty());
 		invoiceShippingAddress.textProperty().bindBidirectional(presentationModel.invoiceShippingAddressProperty());
 		invoiceAddress.textProperty().bindBidirectional(presentationModel.invoiceAddressProperty());
@@ -192,9 +231,9 @@ public class InvoiceController<T> implements Initializable {
 			clearInvoice.setDisable(true);
 			addElement.setDisable(true);
 			printInvoice.setDisable(false);
+			setCustomer.setDisable(true);
 			/* Textfields */
 			invoiceID.setDisable(true);
-			invoiceDate.setDisable(true);
 			invoiceCustomer.setDisable(true);
 			invoiceShippingAddress.setDisable(true);
 			invoiceAddress.setDisable(true);
@@ -202,8 +241,16 @@ public class InvoiceController<T> implements Initializable {
 			invoiceMessage.setDisable(true);
 			invoiceElement.setDisable(true);
 			invoiceDirection.setDisable(true);
-			invoiceElementAmount.setDisable(true);			
+			invoiceElementAmount.setDisable(true);
+			/* DatePicker */
+			datePicker.setDisable(true);
 		}
+		
+		try {
+		    datePicker.setSelectedDate(new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN).parse((searchResult.get_creationDate())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	@FXML private void addElement() {
@@ -241,17 +288,24 @@ public class InvoiceController<T> implements Initializable {
 	@FXML private void createNewInvoice() {
 		switch(checkInvoiceInput()){
 			case 0:	try {
-						Invoice invoice = new Invoice();
+        			    if( wrongReference ) {
+                            messageLabelRechnung.setText("Wrong reference in Field \"Kundenname\"");
+                            System.out.println("Wrong reference in Field \"Kundenname\"");
+                            return;
+        			    }
+			            Invoice invoice = new Invoice();
 						boolean isOutgoing = false;
+						String invoiceDate = new SimpleDateFormat("yyyy-MM-dd").format(datePicker.getSelectedDate());
 						
 						if(((String)invoiceDirection.getValue()).equals("Ausgehend")){
 							isOutgoing = true;
 						}
 						invoice.set_id(searchResult.get_id());
 						invoice.set_invoiceNumber(Integer.parseInt(invoiceID.getText()));
+						invoice.set_customerId(this.invoiceCustomerId);
 						invoice.set_isOutgoing(isOutgoing);
 						invoice.set_customerName(invoiceCustomer.getText());
-						invoice.set_creationDate(invoiceDate.getText());
+						invoice.set_creationDate(invoiceDate);
 						invoice.set_comment(invoiceComment.getText());
 						invoice.set_message(invoiceMessage.getText());
 						invoice.set_shippingAddress(invoiceShippingAddress.getText());
@@ -284,7 +338,7 @@ public class InvoiceController<T> implements Initializable {
 						
 					}
 					break;
-			case 1:	messageLabelRechnung.setText("Field \"ID\" is not an Integer!");
+			case 1:	messageLabelRechnung.setText("Field \"Rechnungsnummer\" is not an Integer!");
 					System.out.println("Field \"ID\" in TabPane \"Rechnung\" is not an Integer!");
 					break;
 			case 2: messageLabelRechnung.setText("Field \"Richtung\" is not selected!");
@@ -307,6 +361,7 @@ public class InvoiceController<T> implements Initializable {
 		invoiceElement.getSelectionModel().clearSelection();
 		invoiceDirection.getSelectionModel().clearSelection();
 		addedInvoiceElements.clear();
+		datePicker.setSelectedDate(null);
 	}
 	
 	@FXML private void cancelNewInvoice() {
@@ -358,27 +413,112 @@ public class InvoiceController<T> implements Initializable {
         }
 	}
 	
+	@FXML private void checkCustomer() {
+	    ArrayList<Customer> result;
+        if(Utils.isNullOrEmpty(invoiceCustomer.getText())) {
+            result = proxy.searchCustomer(null, null, null);
+        } else {
+            result = proxy.searchCustomer(".*", invoiceCustomer.getText(),
+                    null);
+        }
+        if ( result != null ) {
+            if ( result.size() == 1 ) {
+                if(result.get(0).get_name() == null) {
+                    invoiceCustomer.setText(result.get(0).get_surname()
+                            + " " + result.get(0).get_lastname());
+                } else {
+                    invoiceCustomer.setText(result.get(0).get_name());
+                }                
+                this.invoiceCustomerId = result.get(0).get_id();
+                wrongReference = false;
+            } else {
+                openSearchWindow(result);
+            } 
+        } else {
+            result = proxy.searchCustomer(invoiceCustomer.getText(), ".*", null);
+            if ( result != null ) {
+                if ( result.size() == 1 ) {
+                    if(result.get(0).get_name() == null) {
+                        invoiceCustomer.setText(result.get(0).get_surname()
+                                + " " + result.get(0).get_lastname());
+                    } else {
+                        invoiceCustomer.setText(result.get(0).get_name());
+                    }
+                    this.invoiceCustomerId = result.get(0).get_id();
+                    wrongReference = false;
+                } else {
+                    openSearchWindow(result); 
+                } 
+            } else {
+                result = proxy.searchCustomer(null, null, invoiceCustomer.getText());
+                if ( result != null ) {
+                    if ( result.size() == 1 ) {
+                        if(result.get(0).get_name() == null) {
+                            invoiceCustomer.setText(result.get(0).get_surname()
+                                    + " " + result.get(0).get_lastname());
+                        } else {
+                            invoiceCustomer.setText(result.get(0).get_name());
+                        }
+                        this.invoiceCustomerId = result.get(0).get_id();
+                        wrongReference = false;
+                    } else {
+                        openSearchWindow(result);
+                    }
+                } else {
+                    result = proxy.searchCustomer(null, null, null);
+                    openSearchWindow(result);
+                }
+            }
+        }
+    }
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    private void openSearchWindow(ArrayList<Customer> searchResultList) {      
+        if(searchResultList.size() < 1){
+            messageLabelRechnung.setText("No search results found!");
+            return;
+        }       
+        try {           
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Reference.fxml"));
+            TabPane root = (TabPane)fxmlLoader.load();
+            
+            Stage secondStage = new Stage(StageStyle.DECORATED);
+            secondStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(root, 666, 750);
+            scene.getStylesheets().add(getClass().getResource("/main/application.css").toExternalForm());
+            secondStage.setScene(scene);
+            secondStage.setTitle("SWE 2 - MikroERP");
+            
+            ReferenceController controller = fxmlLoader.<ReferenceController>getController();
+            controller.setSearchResultList(searchResultList);
+            controller.setInvoiceController(this);
+            controller.displaySearchresult();
+            secondStage.show();
+            
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+	
 	private int checkInvoiceInput() {
 		try {
 			if(Integer.parseInt(invoiceID.getText()) > 0
-				&& !Utils.isNullOrEmpty(invoiceDate.getText())
+				&& !Utils.isNullOrEmpty(datePicker.getSelectedDate().toString())
 				&& !Utils.isNullOrEmpty((String)invoiceDirection.getValue())
 				&& !Utils.isNullOrEmpty(invoiceCustomer.getText())
 				&& !Utils.isNullOrEmpty(invoiceShippingAddress.getText())
 				&& !Utils.isNullOrEmpty(invoiceAddress.getText())
+				&& invoiceCustomerId > 0
 				&& !elementTable.getItems().isEmpty()){
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				sdf.setLenient(false);
-				@SuppressWarnings("unused")
-				Date convertedDate = sdf.parse(invoiceDate.getText());
+			    if ( datePicker.invalidProperty().get()) {
+	                return 3;
+	            }
 				return 0;
 			} 
 		} catch(NumberFormatException e){
 			return 1;
 		} catch(NullPointerException e){
 			return 2;
-		} catch (ParseException e) {
-			return 3;
 		}
 		return 4;
 	}
@@ -458,4 +598,16 @@ public class InvoiceController<T> implements Initializable {
 	public void setSearchResult(Invoice searchResult) {
 		this.searchResult = searchResult;
 	}
+	
+	public void setReferenceName(String customer) {
+	    this.invoiceCustomer.setText(customer);
+	}
+	
+	public void setReferenceId(int id) {
+        this.invoiceCustomerId = id;
+    }
+	
+	public void setWrongReference(boolean wrongReference) {
+        this.wrongReference = wrongReference;
+    }
 }

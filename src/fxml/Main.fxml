@@ -11,30 +11,13 @@
 
 <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml" 
 	fx:controller="controllers.MainController">
-	<Tab text="Start">
-		<VBox styleClass="borderedBox">
-			<TitledBorder title="Statistik">
-				<VBox styleClass="textField">
-					<Text fx:id="totalCustomers">Total Number of Customers: XX</Text>
-					<Text fx:id="totalInvoices">Total Number of Invoices: XX</Text>
-				</VBox>
-			</TitledBorder>
-			<HBox styleClass="hbox" alignment="BASELINE_CENTER">
-				<Label fx:id="messageLabelStart" styleClass="message" />
-			</HBox>
-		</VBox>	
-	</Tab>
 	<Tab text="Suche">
 		<VBox>
 			<VBox styleClass="borderedBox">
 				<TitledBorder title="Suche nach Rechnung">
 					<VBox styleClass="textField">
-						<HBox styleClass="hbox">
+						<HBox fx:id="searchDateBox" styleClass="hbox">
 							<Label styleClass="searchLabel" prefWidth="62">Datum von:</Label>
-							<TextField fx:id="searchInvoiceDateFrom" styleClass="padding" prefWidth="100" />
-							<Label styleClass="searchLabel" prefWidth="20">bis:</Label>	
-							<TextField fx:id="searchInvoiceDateTo" styleClass="padding" prefWidth="100" />
-							<Label styleClass="customerLabel" prefWidth="100">(YYYY-MM-DD)</Label>			
 						</HBox>
 						<HBox styleClass="hbox">
 							<Label styleClass="searchLabel" prefWidth="62">Betrag von:</Label>
