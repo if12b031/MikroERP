@@ -216,6 +216,7 @@ public class CustomerController implements Initializable{
 	}
 	
 	@FXML private void checkCompany() {
+	    this.wrongReference = true;
 	    ArrayList<Customer> result;
 	    if(Utils.isNullOrEmpty(customerWorksAt.getText())) {
             result = proxy.searchCustomer(null, null, ".*");

@@ -46,13 +46,6 @@ public class ReferenceController<T> implements Initializable {
 		this.presentationModel = new ReferencePresentationModel();
 				
 		applyEventHandlers();
-		
-		if ( invoiceController == null ) {
-		    searchCustomerName.setDisable(true);
-		    searchCustomerLastName.setDisable(true);
-		} else {
-		    applyBindings();
-		}
 	}
 	
 	private void applyBindings() {
@@ -126,7 +119,13 @@ public class ReferenceController<T> implements Initializable {
     }
 	
 	public void displaySearchresult() {
-		SearchresultCustomerTableModel tableModel = new SearchresultCustomerTableModel(searchresultList);
+	    if ( invoiceController == null ) {
+            searchCustomerName.setDisable(true);
+            searchCustomerLastName.setDisable(true);
+        } else {
+            applyBindings();
+        }	    
+	    SearchresultCustomerTableModel tableModel = new SearchresultCustomerTableModel(searchresultList);
 		ObservableList<SearchCustomerModel> items = (ObservableList<SearchCustomerModel>) tableModel.getItems();
 		
 		searchresultTable.setItems(items);
@@ -134,12 +133,7 @@ public class ReferenceController<T> implements Initializable {
 			@Override
 			public void handle(MouseEvent event) {
 			    if(event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)){
-			    	int index = searchresultTable.getSelectionModel().getSelectedIndex();			    	
-			    	if(index >= 0){
-			    	    if(invoiceController != null) {
-			                setReference();
-			    	    }
-			    	}
+			        setReference();
 			    }
 			}
 		});

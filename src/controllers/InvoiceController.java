@@ -414,6 +414,7 @@ public class InvoiceController<T> implements Initializable {
 	}
 	
 	@FXML private void checkCustomer() {
+	    this.wrongReference = true;
 	    ArrayList<Customer> result;
         if(Utils.isNullOrEmpty(invoiceCustomer.getText())) {
             result = proxy.searchCustomer(null, null, null);
